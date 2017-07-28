@@ -3,7 +3,7 @@
       
      <toggle-source :sources='sources'></toggle-source>
 
-    <div class='card'>
+    <div class='card bg-dark'>
       <div class="list" id="feed-table">
         <item v-for='(item, idx) in filteredItems'
               :item='item'
