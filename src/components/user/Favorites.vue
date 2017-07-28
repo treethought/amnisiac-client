@@ -1,19 +1,9 @@
 <template>
   <div>
 
-    <div class="container-fluid">
-      <div class="page-header">
-        <h1><small>{{user.username}}::</small>Favorites</h1>
-
-        <h2>Favorites</h2>
-      </div>
-    </div>
-
     <div v-if='items'>
       <player :items='items'></player>
     </div>
-
-
 
  <div v-if='items'>
     <feed-list :items='reversedItems' :user='user'></feed-list>

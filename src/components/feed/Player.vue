@@ -2,7 +2,7 @@
 <div v-if='currentItem' class="container">
 
 
-<div class='player  container col-md-8 col-md-offset-2'>
+<div class='player container col-md-8 col-md-offset-2'>
  <section>
     <div class='video-container card-content'>
       <youtube :video-id="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1}"></youtube>
@@ -11,10 +11,10 @@
  <hr>
 </div>
 
-<div class='card container bg-pink-2 text-white'>
+<div class='card container bg-secondary text-white'>
   <!-- <section> -->
 
-   <section class='card-title'>
+   <section class='card-title text-center'>
     {{currentItem.raw_title}}<br>
     <button type="button" v-on:click.stop="previous">
      <i class="fa fa-backward" aria-hidden="true"></i>
@@ -33,13 +33,6 @@
   </section class='card-title'>
 
 </div>
-  <!-- </section> -->
-<!-- <div v-else>
-<button type="button" v-on:click="startFeed">
-   <i class="fa fa-play" aria-hidden="true"></i>
-  </button>
-</div> -->
-
 
 </div>
 

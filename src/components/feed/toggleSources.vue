@@ -1,6 +1,6 @@
 <template>
 <div class='card'>
-  <q-tabs :refs="$refs" v-model="selectedSource">
+  <q-tabs :refs="$refs" v-model="selectedSource" class='text-center'>
     <q-tab name='all' icon='all'>all</q-tab>
 
     <q-tab v-for='source in sources' :key='source'

@@ -1,22 +1,20 @@
 <template>
-    <div class='feed-list container' ref:items>
+  <div class='feed-list container' ref:items>
       
      <toggle-source :sources='sources'></toggle-source>
-      <div class='card'>
-  <!--     <div class="card-title">
-       
-      </div> -->
-        <div class="list" id="feed-table">
-            <item v-for='(item, idx) in filteredItems'
-                  :item='item'
-                  :idx=idx
-                  :key='item.key'
-                  :currentIdx='currentIdx'>
-            </item>
-        </div>
-      </div>
 
+    <div class='card'>
+      <div class="list" id="feed-table">
+        <item v-for='(item, idx) in filteredItems'
+              :item='item'
+              :idx=idx
+              :key='item.key'
+              :currentIdx='currentIdx'>
+        </item>
+      </div>
     </div>
+
+  </div>
 </template>
 
 <script>
