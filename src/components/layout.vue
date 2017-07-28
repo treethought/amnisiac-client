@@ -6,22 +6,22 @@
         <i>menu</i>
       </button> -->
      
-      <q-toolbar-title :padding="1">
-        <h4>amnisiac
+      <q-toolbar-title :padding="2"
+        <div class='text-left'>
+        <big>amnis<span>!ac</span>
          <img src="../assets/icons/mtn-stream.png" width="30" height="30" alt="">
-         </h4>
+         </big>
+         </div>
       </q-toolbar-title>
-      <!-- <q-tab icon="home" route="/home" exact replace>home</q-tab> -->
-     <!--  <button icon="" route="/listen" exact replace>listen</button>
-      <button v-if='!authenticated' icon="login" route="/login" exact replace>login</button>
-      <button v-if='!authenticated' icon="register" route="/register" exact replace>register</button>
-      <button v-if='authenticated' icon="favorites" route="/favorites" exact replace>favorites</button>
-      <button v-if='authenticated' icon="dashboard" route="/dashboard" exact replace>dashboard</button>
-      
-      <button v-if='authenticated' icon="logout" route="/login" exact replace @click.native='logout'>logout</button> -->
+
+      <div class='text-center'>
+           <small v-if='user'>{{user.username}}</small> :: <big>{{title}}</big>
+       </div>
+
+
 
     </div>
-   
+
 
     <!-- Drawer -->
   <!--   <q-drawer ref="drawer">
@@ -41,7 +41,6 @@
     
       </div>
     </q-drawer> -->
-   
 
     <router-view class="layout-view"></router-view>
     <!-- <div class="layout-view"></div> -->
@@ -50,17 +49,18 @@
     <div slot="footer" class="toolbar">
     <!-- <q-tabs slot="navigation" class='toolbar' :padding="1"> -->
       <q-tab icon="home" route="/home" exact replace>home</q-tab>
-      <q-tab icon="headphones" route="/listen" exact replace>listen</q-tab>
+      <q-tab icon="radio" route="/listen" exact replace>listen</q-tab>
       <q-tab v-if='!authenticated' icon="login" route="/login" exact replace>login</q-tab>
       <q-tab v-if='!authenticated' icon="register" route="/register" exact replace>register</q-tab>
       <q-tab v-if='authenticated' icon="favorites" route="/favorites" exact replace>favorites</q-tab>
-      <q-tab v-if='authenticated' icon="dashboard" route="/dashboard" exact replace>dashboard</q-tab>
+      <q-tab v-if='authenticated' icon="playlist_play" route="/dashboard" exact replace>dashboard</q-tab>
+      <q-tab v-if='authenticated' icon="playlist_play" route="/manage" exact replace>manage</q-tab>
       
       <q-tab v-if='authenticated' icon="logout" route="/login" exact replace @click.native='logout'>logout</q-tab>
 
 
 
-    </q-tabs>
+    <!-- </q-tabs> -->
       
     </div>
    
@@ -76,6 +76,11 @@ export default {
     logout () {
       auth.logout(this)
     }
+  },
+  computed: {
+    title: function () {
+      return this.$route.name
+    }
   }
 }
 </script>
@@ -83,6 +88,16 @@ export default {
 <style>
 
 h4 {
-  font-family: Comfortaa;
+  /*color: purple !important;*/
+  font-family: 'Comfortaa', cursive;
+    /*font-size: 60px;*/
+
 }
+span {
+  color: black !important;
+}
+
+/*h4 {
+  font-family: Comfortaa;
+}*/
 </style>
