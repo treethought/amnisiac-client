@@ -1,11 +1,12 @@
 import axios from 'axios'
 // import auth from './auth.js'
+import { LocalStorage } from 'quasar'
 
  // The object to be passed as a header for authenticated requests
 function getAuthHeader () {
   // var tokenString = 'Bearer ' + window.localStorage.getItem('access_token')
   console.log('Creating tokenString')
-  var tokenString = 'Bearer ' + localStorage.getItem('access_token')
+  var tokenString = 'Bearer ' + LocalStorage.get.item('access_token')
   return tokenString
 }
 

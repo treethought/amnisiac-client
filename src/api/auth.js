@@ -1,5 +1,6 @@
 // import router from '../router/index.js'
 import {http} from './common.js'
+import { LocalStorage } from 'quasar'
 // import api from './api.js'
 // import {Bus} from '../event-bus.js'
 
@@ -13,8 +14,8 @@ export default {
     return http.post('auth', creds)
     .then(response => {
       console.log(response)
-      localStorage.setItem('access_token', response.data.access_token)
-      localStorage.setItem('refresh_token', response.data.refresh_token)
+      LocalStorage.set('access_token', response.data.access_token)
+      LocalStorage.set('refresh_token', response.data.refresh_token)
       context.$store.authenticated = true
       console.log('User was authenticated')
     })
@@ -29,8 +30,8 @@ export default {
     return http.post('register', creds)
     .then(response => {
       console.log(response)
-      localStorage.setItem('access_token', response.data.access_token)
-      localStorage.setItem('refresh_token', response.data.refresh_token)
+      LocalStorage.set('access_token', response.data.access_token)
+      LocalStorage.set('refresh_token', response.data.refresh_token)
       context.$store.authenticated = true
       console.log('User was created and authenticated')
     })
@@ -44,29 +45,29 @@ export default {
     console.log('reshreshing token')
     http.post('refresh', {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('refresh_token')
+        Authorization: 'Bearer ' + LocalStorage.get.item('refresh_token')
       }})
     .then(response => {
-      localStorage.setItem('access_token', response.data.access_token)
+      LocalStorage.set('access_token', response.data.access_token)
       retry()
     })
   },
   logout (context) {
     console.log('Logging out user')
-    localStorage.removeItem('access_token')
-    console.log('token is now ' + localStorage.getItem('access_token'))
+    LocalStorage.remove('access_token')
+    console.log('token is now ' + LocalStorage.get.item('access_token'))
     context.$store.authenticated = false
     context.$store.user = null
   },
   checkAuth () {
-    console.log('Auth status: ' + !!localStorage.getItem('access_token'))
-    return !!localStorage.getItem('access_token')
+    console.log('Auth status: ' + !!LocalStorage.get.item('access_token'))
+    return !!LocalStorage.get.item('access_token')
   },
    // The object to be passed as a header for authenticated requests
   getAuthHeader () {
-    var tokenString = 'Bearer ' + localStorage.getItem('access_token')
+    var tokenString = 'Bearer ' + LocalStorage.get.item('access_token')
     let head = {
-      Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      Authorization: 'Bearer ' + LocalStorage.get.item('access_token')
     }
     console.log('HEADER IS')
     console.log(head)
