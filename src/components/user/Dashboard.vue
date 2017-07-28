@@ -1,12 +1,6 @@
 <template>
   <div>
 
-    <div class="container-fluid">
-      <div v-if='user' class="page-header">
-        <h1><small>{{user.username}}::</small>Dashboard</h1>
-      </div>
-    </div>
-
     <div v-if='items'>
       <player :items='items'></player>
     </div>
@@ -51,9 +45,9 @@ export default {
       if (this.user) {
         for (var i = 0; i < this.user.feeds.length; i++) {
           sourceNames.push(this.user.feeds[i].name.replace('/r/', ''))
-          return sourceNames.join('+')
         }
       }
+      return sourceNames.join('+')
     }
   },
   components: {
@@ -77,3 +71,15 @@ export default {
   }
 }
 </script>
+
+<style>
+  big.token {
+  color: purple !important;
+  font-family: 'Comfortaa', cursive !important;
+    /*font-size: 60px;*/
+
+}
+small {
+  color: black !important;
+}
+</style>
