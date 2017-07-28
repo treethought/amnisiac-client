@@ -1,6 +1,7 @@
 export default {
   authenticated: false,
   user: null,
-  selectedSource: 'all'
-
+  selectedSource: 'all',
+  currentItem: null,
+  currentlyPlaying: false
 }

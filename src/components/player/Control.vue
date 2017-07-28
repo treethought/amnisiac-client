@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  props: ['currentItem', 'currentlyPlaying'],
+  store: ['currentItem', 'currentlyPlaying'],
   data () {
     return {}
   },

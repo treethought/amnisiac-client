@@ -12,8 +12,6 @@
 </div>
 
 <controls
-  :currentItem.sync='currentItem' 
-  :currentlyPlaying.sync='currentlyPlaying'
   v-on:previous='previous'
   v-on:pause='pause'
   v-on:resume='resume'
@@ -32,6 +30,7 @@
   export default {
     name: 'player',
     props: ['items'],
+    store: ['currentItem', 'currentlyPlaying'],
     components: {
       Controls
     },
@@ -39,9 +38,9 @@
       return {
         // videoId: this.currentItem.track_id,
         firstItem: this.items[0],
-        currentItem: null,
+        // currentItem: null,
         currentIdx: null,
-        currentlyPlaying: false,
+        // currentlyPlaying: false,
         player: null
       }
     },
