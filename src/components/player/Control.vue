@@ -31,16 +31,16 @@ export default {
   },
   methods: {
     previous () {
-      this.$emit('previous')
+      this.$root.$emit('previous')
     },
     pause () {
-      this.$emit('pause')
+      this.$root.$emit('pause')
     },
     resume () {
-      this.$emit('resume')
+      this.$root.$emit('resume')
     },
     next () {
-      this.$emit('next')
+      this.$root.$emit('next')
     }
   }
 }

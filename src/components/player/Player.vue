@@ -11,13 +11,7 @@
  <hr>
 </div>
 
-<controls
-  v-on:previous='previous'
-  v-on:pause='pause'
-  v-on:resume='resume'
-  v-on:next='next'>
-
- </controls>
+<control></control>
 
 
 </div>
@@ -26,13 +20,13 @@
 
 
 <script>
-  import Controls from './Control'
+  import Control from './Control'
   export default {
     name: 'player',
     props: ['items'],
     store: ['currentItem', 'currentlyPlaying'],
     components: {
-      Controls
+      Control
     },
     data () {
       return {
@@ -46,6 +40,10 @@
     },
     created () {
       this.$root.$on('select-item', this.loadItem)
+      this.$root.$on('previous', this.previous)
+      this.$root.$on('pause', this.pause)
+      this.$root.$on('resume', this.resume)
+      this.$root.$on('next', this.next)
       // this.$root.$on('feed-ready', this.setFirstItem)
       // console.log('items as player prop is ' + this.items)
     },
