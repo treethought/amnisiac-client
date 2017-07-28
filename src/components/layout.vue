@@ -3,12 +3,12 @@
     <div slot="header" class="toolbar">
       <!-- opens drawer below -->
       <button class="hide-on-drawer-visible" @click="$refs.drawer.open()">
-        <i>menu</i>
+        <img src="../assets/icons/mtn-stream.png" width="30" height="30" alt="">
       </button>
      
       <q-toolbar-title :padding="2"
         <div class='text-left'>
-        <img src="../assets/icons/mtn-stream.png" width="30" height="30" alt="">
+        <!-- <img src="../assets/icons/mtn-stream.png" width="30" height="30" alt=""> -->
         <big>amnis<span>!ac</span></big>
          </div>
       </q-toolbar-title>
@@ -34,17 +34,16 @@
       </div> -->
       <q-drawer-link icon="home" to="/home">home</q-drawer-link>
       <q-drawer-link icon="radio" to="/listen">listen</q-drawer-link>
-      <q-drawer-link v-if='!user' icon="register" to="/register">register</q-drawer-link>
-      <q-drawer-link v-if='user' icon="favorites" to="/favorites">favorites</q-drawer-link>
-      <q-drawer-link v-if='user' icon="playlist_play" to="/dashboard">dashboard</q-drawer-link>
-      <q-drawer-link v-if='user' icon="build" to="/manage">manage</q-drawer-link>
+      <q-drawer-link v-if='authenticated' icon="favorites" to="/favorites">favorites</q-drawer-link>
+      <q-drawer-link v-if='authenticated' icon="playlist_play" to="/dashboard">dashboard</q-drawer-link>
+      <q-drawer-link v-if='authenticated' icon="build" to="/manage">manage</q-drawer-link>
       
-      <q-drawer-link v-if='user' icon="logout" to="/login" @click.native='logout'>logout</q-drawer-link>
+      <q-drawer-link v-if='authenticated' icon="account_circle" to="/login" @click.native='logout'>logout</q-drawer-link>
 
-      <q-drawer-link v-if='!user' icon="login" to='/login'>
+      <q-drawer-link v-if='!authenticated' icon="account_circle" to='/login'>
         Login
       </q-drawer-link>
-      <q-drawer-link v-if='!user' icon="register" to='/register'>
+      <q-drawer-link v-if='!authenticated' icon="supervisor_account" to='/register'>
         Register
       </q-drawer-link>
       </div>
@@ -56,22 +55,27 @@
     <!-- <div class="layout-view"></div> -->
 
     <!-- Footer -->
-    <div slot="footer" class="toolbar" :padding="1">
-    <!-- <q-tabs slot="navigation" class='toolbar' :padding="1"> -->
-      <q-tab icon="home" route="/home" exact replace>home</q-tab>
-      <q-tab icon="radio" route="/listen" exact replace>listen</q-tab>
-      <q-tab v-if='!authenticated' icon="login" route="/login" exact replace>login</q-tab>
-      <q-tab v-if='!authenticated' icon="register" route="/register" exact replace>register</q-tab>
-      <q-tab v-if='authenticated' icon="favorites" route="/favorites" exact replace>favorites</q-tab>
-      <q-tab v-if='authenticated' icon="playlist_play" route="/dashboard" exact replace>dashboard</q-tab>
-      <q-tab v-if='authenticated' icon="build" route="/manage" exact replace>manage</q-tab>
-      
-      <q-tab v-if='authenticated' icon="logout" route="/login" exact replace @click.native='logout'>logout</q-tab>
 
+    <div slot="footer" class="" :padding="1">
+        <control v-if='currentItem'></control>
 
+        <!-- <div class='toolbar desktop-only'> -->
+        <!-- <div slot='footer' class='toolbar'> -->
+        <q-tabs slot="navigation" class='toolbar justified bg-tertiary' :padding="1">
+          <!-- <q-tab icon="home" route="/home" exact replace>home</q-tab> -->
+          <q-tab icon="radio" route="/listen" exact replace>listen</q-tab>
+          
+          <q-tab v-if='authenticated' icon="favorites" route="/favorites" exact replace>favorites</q-tab>
+          <q-tab v-if='authenticated' icon="playlist_play" route="/dashboard" exact replace>dashboard</q-tab>
+          <q-tab v-if='authenticated' icon="build" route="/manage" exact replace>manage</q-tab>
+          
+          <q-tab class='mobile-only' v-if='authenticated' icon="account_circle" route="/login" exact replace @click.native='logout'>logout</q-tab>
 
-    <!-- </q-tabs> -->
-      
+          <q-tab v-if='!authenticated' icon="account_circle" route="/login" exact replace>login</q-tab>
+          <q-tab v-if='!authenticated' icon="supervisor_account" route="/register" exact replace>register</q-tab>
+        </q-tabs>
+        <!-- </div> -->
+      <!-- </div> -->
     </div>
    
   </q-layout>
@@ -79,9 +83,13 @@
 
 <script>
 import auth from '../api/auth.js'
+import Control from './player/Control'
 export default {
-  name: 'nav-bar-head',
-  store: ['authenticated', 'user'],
+  name: 'layout',
+  store: ['authenticated', 'user', 'currentItem'],
+  components: {
+    Control
+  },
   methods: {
     logout () {
       auth.logout(this)
