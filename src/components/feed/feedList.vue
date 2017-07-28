@@ -1,9 +1,10 @@
 <template>
   <div class='feed-list container' ref:items>
       
-     <toggle-source :sources='sources'></toggle-source>
+     
 
-    <div class='card bg-dark'>
+    <div v-if='items' class='card bg-tertiary'>
+    <toggle-source class='card-title' :sources='sources'></toggle-source>
       <div class="list" id="feed-table">
         <item v-for='(item, idx) in filteredItems'
               :item='item'

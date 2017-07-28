@@ -1,19 +1,19 @@
 <template>
-<div class='card'>
-  <q-tabs :refs="$refs" v-model="selectedSource" class='text-center'>
+<!-- <div class='card-title'>
+ --><q-tabs :refs="$refs" v-model="selectedSource" class='toolbar justified text-primary'>
     <q-tab name='all' icon='all'>all</q-tab>
 
     <q-tab v-for='source in sources' :key='source'
       :name='source'
-      icon="message">
+      icon="label_outline">
       {{source}}
     </q-tab>
   </q-tabs>
 <!-- <div ref="xtab-1">...</div>
 <div ref="xtab-2">...</div>
 <div ref="xtab-3">...</div> -->
-</div>
-
+<!-- </div>
+ -->
 
 </template>
 
