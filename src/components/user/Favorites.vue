@@ -17,7 +17,7 @@
 // import auth from '../../auth/index.js'
 import api from '../../api/api.js'
 import feedList from '../feed/feedList'
-import Player from '../feed/Player'
+import Player from '../player/Player'
 import toggleSource from '../feed/toggleSources'
 export default {
   name: 'favorites',

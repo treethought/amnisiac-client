@@ -1,6 +1,14 @@
 <template>
 <div class="container">
 
+  <div class="toolbar white">
+      <q-toolbar-title :padding="2">
+        <div class='wrap'>
+        <h5><big class='token'>Listen</big></h5>
+        </div>
+      </q-toolbar-title>
+    </div>
+
   <div class="container">
     <search-field></search-field>
   </div>
@@ -29,7 +37,7 @@
 </template>
 
 <script>
-import Player from './Player'
+import Player from '../player/Player'
 import feedList from './feedList'
 import searchField from '../Search'
 import api from '../../api/api.js'
