@@ -114,5 +114,36 @@ export default {
         router.push(redirect)
       }
     })
+  },
+  addSources (reddit, sc, context) {
+    console.log('Adding sources ' + reddit + sc)
+    return http.post('users/sources', {
+      params: {
+        reddit_query: reddit,
+        sc_query: sc
+      }
+    })
+    .then(response => {
+      context.$store.user = response.data
+      console.log('User sources updated')
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
+  },
+  removeSource (source, context) {
+    console.log('Removing ' + source + 'from user feeds')
+    return http.put('users/sources', {
+      params: {
+        source: source
+      }
+    })
+    .then(response => {
+      context.$store.user = response.data
+      console.log('User sources updated')
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
   }
 }

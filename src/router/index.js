@@ -35,19 +35,29 @@ export default new VueRouter({
           // UserProfile will be rendered inside User's <router-view>
           // when /user/:id/profile is matched
           path: 'listen',
+          name: 'Listen',
           component: load('feed/Listen')
         },
         {
           // UserPosts will be rendered inside User's <router-view>
           // when /user/:id/posts is matched
           path: 'favorites',
+          name: 'Favorites',
           component: load('user/Favorites')
         },
         {
           // UserPosts will be rendered inside User's <router-view>
           // when /user/:id/posts is matched
           path: 'dashboard',
+          name: 'Dashboard',
           component: load('user/Dashboard')
+        },
+        {
+          // UserPosts will be rendered inside User's <router-view>
+          // when /user/:id/posts is matched
+          path: 'manage',
+          name: 'Manage',
+          component: load('user/Manage')
         },
         {
           // UserPosts will be rendered inside User's <router-view>
