@@ -1,20 +1,33 @@
 <template>
-<div v-if='currentItem' class="container">
+<div v-if='currentItem'>
 
+<q-modal v-show='playerVisible' ref="playerModal"
+          position='top' content-classes='card' content-css='transparent'>
 
-<div class='player container col-md-8 col-md-offset-2'>
+  <div class='card-content video-container'>
+    <youtube :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1}"></youtube>
+  </div>
+<!-- 
+<div class='player card-content bg-black col-md-8 col-md-offset-2'>
  <section>
-    <div class='video-container card-content'>
-      <youtube :video-id="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1}"></youtube>
-    </div>
-  </section>
- <hr>
+    <div class='video-container '>
+      <youtube :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1}"></youtube>
+    </div> 
+ </section>
+
+ <hr> -->
+<!-- </div> -->
+ <button
+    class="primary circular fixed-bottom-right z-absolute"
+    @click="playerVisible=false" icon='music_video'>Hide
+</button>
+</q-modal>  
+
+
+
 </div>
 
-<control></control>
 
-
-</div>
 
 </template>
 
@@ -24,9 +37,21 @@
   export default {
     name: 'player',
     props: ['items'],
-    store: ['currentItem', 'currentlyPlaying'],
+    store: ['currentItem', 'currentlyPlaying', 'playerVisible'],
     components: {
       Control
+    },
+    watch: {
+      playerVisible: function () {
+        if (this.playerVisible) {
+          console.log('opening player')
+          // this.$refs.playerModal.classList.remove('invisible')
+        }
+        else {
+          console.log('closing player')
+          // this.$refs.playerModal.classList.add('invisible')
+        }
+      }
     },
     data () {
       return {
@@ -58,6 +83,7 @@
         this.firstItem = item
       },
       ready (player) {
+        // this.$refs.playerModal.open()
         this.player = player
         this.player.playVideo()
       },

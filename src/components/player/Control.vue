@@ -1,8 +1,10 @@
 <template>
-  <div class='card container bg-secondary text-white'>
+  <!-- <div class='card container bg-tertiary text-white'> -->
+  <div>
   <!-- <section> -->
 
-   <section class='card-title text-center'>
+  <q-toolbar-title class='text-center'>
+     <section class='text-center'>
     {{currentItem.raw_title}}<br>
     <button type="button" v-on:click.stop="previous">
      <i class="fa fa-backward" aria-hidden="true"></i>
@@ -18,14 +20,22 @@
     <button type="button" v-on:click.stop="next">
      <i class="fa fa-forward" aria-hidden="true"></i>
     </button>
-  </section class='card-title'>
+  </section>
+  </q-toolbar-title>
+ 
+<button v-if='!playerVisible'
+    class="primary circular fixed-bottom-right z-absolute"
+    @click="togglePlayer()" icon='music_video'>Video
+</button>
+   
 
 </div>
 </template>
 
 <script>
 export default {
-  store: ['currentItem', 'currentlyPlaying'],
+  name: 'control',
+  store: ['currentItem', 'currentlyPlaying', 'playerVisible'],
   data () {
     return {}
   },
@@ -41,6 +51,14 @@ export default {
     },
     next () {
       this.$root.$emit('next')
+    },
+    togglePlayer () {
+      if (this.playerVisible) {
+        this.playerVisible = false
+      }
+      else {
+        this.playerVisible = true
+      }
     }
   }
 }
