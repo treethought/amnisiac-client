@@ -2,11 +2,11 @@
   <div>
 
     <div v-if='items'>
-      <player :items='items'></player>
+      <player :items='reversedItems'></player>
     </div>
 
  <div v-if='items'>
-    <feed-list :items='reversedItems' :user='user'></feed-list>
+    <feed-list :items='reversedItems'></feed-list>
   </div>
 
 </div>
