@@ -32,42 +32,31 @@ export default new VueRouter({
           component: load('Home')
         },
         {
-          // UserProfile will be rendered inside User's <router-view>
-          // when /user/:id/profile is matched
           path: 'listen',
           name: 'Listen',
           component: load('feed/Listen')
         },
         {
-          // UserPosts will be rendered inside User's <router-view>
-          // when /user/:id/posts is matched
           path: 'favorites',
           name: 'Favorites',
           component: load('user/Favorites')
         },
         {
-          // UserPosts will be rendered inside User's <router-view>
-          // when /user/:id/posts is matched
           path: 'dashboard',
           name: 'Dashboard',
           component: load('user/Dashboard')
         },
         {
-          // UserPosts will be rendered inside User's <router-view>
-          // when /user/:id/posts is matched
           path: 'manage',
           name: 'Manage',
           component: load('user/Manage')
         },
         {
-          // UserPosts will be rendered inside User's <router-view>
-          // when /user/:id/posts is matched
           path: 'login',
+          name: 'Login',
           component: load('user/Login')
         },
         {
-          // UserPosts will be rendered inside User's <router-view>
-          // when /user/:id/posts is matched
           path: 'register',
           component: load('user/Register')
         }
@@ -76,44 +65,3 @@ export default new VueRouter({
     { path: '*', component: load('Error404') } // Not found
   ]
 })
-
-// import Vue from 'vue'
-// import Router from 'vue-router'
-// // import Hello from '@/components/Hello'
-// import Home from '@/components/Home'
-// import Feed from '@/components/feed/Index'
-// import Login from '@/components/Login'
-// import Favorites from '@/components/user/Favorites'
-// import Dashboard from '@/components/user/Dashboard'
-
-// Vue.use(Router)
-
-// export default new Router({
-//   routes: [
-//     {
-//       path: '/',
-//       name: 'Home',
-//       component: Home
-//     },
-//     {
-//       path: '/listen',
-//       name: 'Listen',
-//       component: Feed
-//     },
-//     {
-//       path: '/login',
-//       name: 'Login',
-//       component: Login
-//     },
-//     {
-//       path: '/favorites',
-//       name: 'Favorites',
-//       component: Favorites
-//     },
-//     {
-//       path: '/dashboard',
-//       name: 'Dashboard',
-//       component: Dashboard
-//     }
-//   ]
-// })
