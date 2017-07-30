@@ -3,5 +3,6 @@ export default {
   user: null,
   selectedSource: 'all',
   currentItem: null,
-  currentlyPlaying: false
+  currentlyPlaying: false,
+  playerVisible: false
 }

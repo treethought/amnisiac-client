@@ -1,27 +1,21 @@
 <template>
-<div v-if='currentItem'>
+<div v-if='currentItem' class='flex'>
 
-<q-modal v-show='playerVisible' ref="playerModal"
-          position='top' content-classes='card' content-css='transparent'>
 
-  <div class='card-content video-container'>
-    <youtube :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1}"></youtube>
+<!-- <div v-show='playerVisible' ref="playerModal" class='card fixed-top'> -->
+
+  <div v-show='playerVisible' class='card bg-tertiary text-center '>
+    <youtube class='card-content video' :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1, controls: false}"></youtube>
   </div>
-<!-- 
-<div class='player card-content bg-black col-md-8 col-md-offset-2'>
- <section>
-    <div class='video-container '>
-      <youtube :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1}"></youtube>
-    </div> 
- </section>
 
- <hr> -->
-<!-- </div> -->
- <button
+<!--  -->
+<!-- </div>  -->
+
+  <button v-show='playerVisible'
     class="primary circular fixed-bottom-right z-absolute"
-    @click="playerVisible=false" icon='music_video'>Hide
+    @click="playerVisible=false" icon='music_video'><i>music_video</i>
 </button>
-</q-modal>  
+
 
 
 
@@ -135,6 +129,7 @@
   .video-container {
   position:relative;
   padding-bottom:56.25%;
+  /*padding-bottom: 20%;*/
   padding-top:30px;
   height:0;
   overflow:hidden;
@@ -144,7 +139,9 @@
   position:absolute;
   top:0;
   left:0;
-  width:100%;
-  height:100%;
+  width:80%;
+  height:80%;
+
+
 }
 </style>
