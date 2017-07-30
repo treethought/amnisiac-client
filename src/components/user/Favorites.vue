@@ -1,9 +1,9 @@
 <template>
   <div>
 
-    <div v-if='items'>
+  <!--   <div v-if='items'>
       <player :items='reversedItems'></player>
-    </div>
+    </div> -->
 
  <div v-if='items'>
     <feed-list :items='reversedItems'></feed-list>

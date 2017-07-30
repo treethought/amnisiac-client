@@ -13,9 +13,9 @@
     <search-field></search-field>
   </div>
 
-  <div v-if='items'>
+<!--   <div v-if='items'>
       <player :items='items'></player>
-    </div>
+    </div> -->
 
  <div v-if='items'>
     <!-- <toggle-source :sources='sources'></toggle-source> -->

@@ -1,7 +1,12 @@
 <template>
-  <div class='feed-list container' ref:items>
-      
-     
+
+<div>
+  
+  <div v-if='items'>
+      <player :items='filteredItems'></player>
+  </div>
+
+  <div class='feed-list flex'>
 
     <div v-if='items' class='card bg-tertiary'>
     <toggle-source class='card-title' :sources='sources'></toggle-source>
@@ -16,16 +21,19 @@
     </div>
 
   </div>
+</div>
 </template>
 
 <script>
   import Item from './Item'
   import toggleSource from './toggleSources'
+  import Player from '../player/Player'
   export default {
     name: 'feed-list',
     components: {
       Item,
-      toggleSource
+      toggleSource,
+      Player
     },
     props: ['items', 'title'],
     store: ['selectedSource'],

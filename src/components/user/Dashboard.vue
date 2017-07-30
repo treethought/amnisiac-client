@@ -1,10 +1,10 @@
 <template>
   <div>
 
-    <div v-if='items'>
+<!--     <div v-if='items'>
       <player :items='items'></player>
     </div>
-
+ -->
  <div v-if='items'>
     <feed-list :items='items'></feed-list>
   </div>
@@ -29,6 +29,7 @@ import api from '../../api/api.js'
 import feedList from '../feed/feedList'
 import Player from '../player/Player'
 import toggleSource from '../feed/toggleSources'
+import { Loading } from 'quasar'
 export default {
   name: 'dashboard',
   store: ['user', 'authenticated'],
@@ -37,6 +38,22 @@ export default {
       items: [],
       isLoading: false,
       alertError: false
+    }
+  },
+  watch: {
+    isLoading: function () {
+      if (this.isLoading) {
+        Loading.show({
+          message: 'Fetching from your sources',
+          messageColor: 'purple',
+          spinner: 'dots',
+          spinnerSize: 250, // in pixels
+          spinnerColor: '#f034a3'
+        })
+      }
+      else {
+        Loading.hide()
+      }
     }
   },
   computed: {
