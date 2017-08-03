@@ -1,4 +1,5 @@
 <template>
+
   <q-layout>
     <div slot="header" class="toolbar">
       <!-- opens drawer below -->
@@ -14,7 +15,7 @@
       </q-toolbar-title>
 
       <div class='text-center'>
-           <small v-if='user'>{{user.username}}</small> :: <big>{{title}}</big>
+           <small v-if='user' class='mobile-only'>{{user.username}}</small> :: <big>{{title}}</big>
        </div>
 
     </div>
@@ -23,8 +24,11 @@
     <!-- Drawer -->
     <q-drawer class='text-primary' ref="drawer">
       <div class="toolbar">
-        <q-toolbar-title>
-          Amnisiac
+        <q-toolbar-title v-if='user'>
+          {{user.username}}
+        </q-toolbar-title>
+        <q-toolbar-title v-else>
+          amnisiac
         </q-toolbar-title>
       </div>
 
@@ -32,7 +36,7 @@
 <!--        <div class="list-header">
         Left Side Drawer
       </div> -->
-      <q-drawer-link icon="home" to="/home">home</q-drawer-link>
+      <q-drawer-link icon="home" to="/">home</q-drawer-link>
       <q-drawer-link icon="radio" to="/listen">listen</q-drawer-link>
       <q-drawer-link v-if='authenticated' icon="favorites" to="/favorites">favorites</q-drawer-link>
       <q-drawer-link v-if='authenticated' icon="playlist_play" to="/dashboard">dashboard</q-drawer-link>
@@ -61,7 +65,7 @@
 
         <!-- <div class='toolbar desktop-only'> -->
         <!-- <div slot='footer' class='toolbar'> -->
-        <q-tabs slot="navigation" class='toolbar justified bg-tertiary' :padding="1">
+        <q-tabs slot="navigation" class='toolbar justified bg-tertiary desktop-hide' :padding="1">
           <!-- <q-tab icon="home" route="/home" exact replace>home</q-tab> -->
           <q-tab icon="radio" route="/listen" exact replace>listen</q-tab>
           

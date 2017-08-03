@@ -21,14 +21,14 @@ export default new VueRouter({
    */
 
   routes: [
-    { path: '/', component: load('layout') }, // Default,
+    // { path: '/', component: load('layout') }, // Default,
     { path: '/',
       component: load('layout'),
       children: [
         {
           // UserProfile will be rendered inside User's <router-view>
           // when /user/:id/profile is matched
-          path: 'home',
+          path: '',
           component: load('Home')
         },
         {
