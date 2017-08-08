@@ -1,6 +1,6 @@
-# Quasar App
+# Amnisiac
 
-> A Quasar project
+> Front end client for [amnisiac](www.amnisaic.com) written with Vue.js and Quasar
 
 ## Build Setup
 
