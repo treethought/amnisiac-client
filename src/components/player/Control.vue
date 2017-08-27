@@ -1,7 +1,8 @@
 <template>
-  <!-- <div class='card container bg-tertiary text-white'> -->
-  <div>
-  <!-- <section> -->
+
+  <!-- <div> -->
+
+   <q-toolbar class="justify-center" :padding="1">
 
   <q-toolbar-title class='text-center z-absolute'>
     {{currentItem.raw_title}}<br>
@@ -33,6 +34,8 @@
   >
   <q-icon name="music_video" />
 </q-btn>
+
+</q-toolbar>
  
 <!-- <button v-if='!playerVisible'
     class="primary circular fixed-bottom-right z-absolute"

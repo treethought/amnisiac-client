@@ -41,54 +41,54 @@
 
 
     <!-- Drawer -->
-    <q-list slot="left">
+    <div slot="left" class='bg-tertiary'>
+  <!--   <q-list  class='bg-tertiary'>
       <q-list-header>
           <span v-if='user'>
             {{user.username}}
           </span>
-      </q-list-header>
+      </q-list-header> -->
       
 
       <q-side-link item to="/" exact>
-        <q-item-side icon="home" />
+        <q-item-side icon="home" color='primary' />
         <q-item-main  label="Home" />
       </q-side-link>
       <q-side-link item to="/listen">
-        <q-item-side icon="radio" />
+        <q-item-side icon="radio" color='primary'/>
         <q-item-main label="Listen" />
       </q-side-link>
       <q-side-link item v-if='authenticated' to="/favorites">
-        <q-item-side icon="favorites" />
+        <q-item-side icon="favorites" color='primary'/>
         <q-item-main label="Favorites" />
       </q-side-link>
       <q-side-link item v-if='authenticated' to="/dashboard">
-        <q-item-side icon="playlist_play" />
+        <q-item-side icon="playlist_play" color='primary'/>
         <q-item-main label="Dashboard" />
       </q-side-link>
       <q-side-link item v-if='authenticated' to="/manage">
-        <q-item-side icon="build" />
+        <q-item-side icon="build" color='primary'/>
         <q-item-main label="Manage" />
       </q-side-link>
       <q-side-link item v-if='authenticated' to="/login" @click.native='logout'>
-        <q-item-side icon="account_circle" />
+        <q-item-side icon="account_circle" color='primary'/>
         <q-item-main label="Logout" />
       </q-side-link>
       <q-side-link item v-if='!authenticated' to="/login">
-        <q-item-side icon="account_circle" />
+        <q-item-side icon="account_circle" color='primary'/>
         <q-item-main label="Login" />
       </q-side-link>
       <q-side-link item v-if='!authenticated' to="/register">
-        <q-item-side icon="supervisor_account" />
+        <q-item-side icon="supervisor_account" color='primary'/>
         <q-item-main label="Register" />
       </q-side-link>
-    </q-list>
+    <!-- </q-list> -->
+    </div>
 
     <router-view></router-view>
 
     <!-- Footer -->
-
-    <q-toolbar slot="footer" class="justify-center" :padding="1">
-        <control v-if='currentItem'></control>
+    <control slot='footer'></control>
 
 <!-- 
         <q-tabs slot="navigation" class='toolbar justified bg-tertiary desktop-hide' :padding="1">
