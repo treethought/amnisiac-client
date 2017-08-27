@@ -1,0 +1,164 @@
+<template>
+<div class=' player' v-if='currentItem'>
+
+  <q-card v-show='playerVisible' class='bg-secondary text-center '>
+  <q-card-title slot='overlay'>{{currentItem.raw_title}}</q-card-title>
+    <q-card-media overlay-position="top">
+     
+    <!-- <div class="q-video"> -->
+        <youtube :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next'
+                 :player-vars="{autoplay: 1, controls: 0, color: 'white', enablejsapi: 1, playsinline: 1, rel: 0, showinfo: 0,
+                 widget_referrer: 'www.amnisiac.com'}"
+                 class=''
+        ></youtube>
+  <!-- </div> -->
+  </q-card-media>
+  </q-card> 
+<!-- 
+<!--
+    <div v-show='playerVisible' class="q-video full-hieght block">
+        <youtube :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1, controls: false}"></youtube>
+  </div> -->
+
+<!-- 
+  <div v-show='playerVisible' class='bg-secondary text-center  '>
+    <youtube class='' :video-id.sync="currentItem.track_id" @ready="ready" @playing="playing" @ended='next' :player-vars="{autoplay: 1, controls: false}"></youtube>
+  </div>
+ -->
+<!--   <q-icon name="music_video" />
+</q-btn> -->
+<!--   <button v-show='playerVisible'
+    class="primary circular fixed-bottom-right z-absolute"
+    @click="playerVisible=false" icon='music_video'><i>music_video</i>
+  </button> -->
+
+</div>
+
+
+
+</template>
+
+
+<script>
+  import Control from './Control'
+  export default {
+    name: 'player',
+    props: ['items'],
+    store: ['currentItem', 'currentlyPlaying', 'playerVisible'],
+    components: {
+      Control
+    },
+    watch: {
+      playerVisible: function () {
+        if (this.playerVisible) {
+          console.log('opening player')
+          // this.$refs.playerModal.classList.remove('invisible')
+        }
+        else {
+          console.log('closing player')
+          // this.$refs.playerModal.classList.add('invisible')
+        }
+      }
+    },
+    data () {
+      return {
+        // videoId: this.currentItem.track_id,
+        firstItem: this.items[0],
+        // currentItem: null,
+        currentIdx: null,
+        // currentlyPlaying: false,
+        player: null
+      }
+    },
+    created () {
+      this.$root.$on('select-item', this.loadItem)
+      this.$root.$on('previous', this.previous)
+      this.$root.$on('pause', this.pause)
+      this.$root.$on('resume', this.resume)
+      this.$root.$on('next', this.next)
+      // this.$root.$on('feed-ready', this.setFirstItem)
+      // console.log('items as player prop is ' + this.items)
+    },
+    methods: {
+      loadItem (item, idx) {
+        console.log('Loading item ' + idx)
+        this.currentItem = item
+        this.currentIdx = idx
+        this.$root.$emit('item-loaded', item, idx)
+      },
+      setFirstItem (item) {
+        this.firstItem = item
+      },
+      ready (player) {
+        // this.$refs.playerModal.open()
+        this.player = player
+        this.player.playVideo()
+      },
+      playing (player) {
+        // player is palying video
+        console.log('Video playing')
+        this.currentlyPlaying = true
+      },
+      change () {
+        // when you change the value, the player will also change.
+        // If you would like to change `playerVars`, please change it before you change `videoId`.
+        // If `playerVars.autoplay` is 1, `loadVideoById` will be called.
+        // If `playerVars.autoplay` is 0, `cueVideoById` will be called.
+        // this.videoId = 'another video id'
+      },
+      startFeed () {
+        this.loadItem(this.firstItem, 0)
+      },
+      resume () {
+        this.player.playVideo()
+        this.currentlyPlaying = true
+      },
+      stop () {
+        this.player.stopVideo()
+        this.currentlyPlaying = false
+      },
+      pause () {
+        this.player.pauseVideo()
+        this.currentlyPlaying = false
+      },
+      next () {
+        console.log('Ended video ' + this.currentIdx)
+        let nextIdx = this.currentIdx + 1
+        let nextItem = this.items[nextIdx]
+        this.loadItem(nextItem, nextIdx)
+        console.log('Loaded video ' + nextIdx)
+      },
+      previous () {
+        let prevIdx = this.currentIdx - 1
+        let prevItem = this.items[prevIdx]
+        this.loadItem(prevItem, prevIdx)
+        console.log('Playing previous item: ' + this.currentIdx)
+      }
+    }
+  }
+</script>
+
+<style>
+  .player {
+    padding: 0;
+  }
+
+  .video-container {
+  position:relative;
+  padding-bottom:56.25%;
+  /*padding-bottom: 20%;*/
+  padding-top:30px;
+  height:0;
+  overflow:hidden;
+}
+
+.video-container iframe, .video-container object, .video-container embed {
+  position:absolute;
+  top:0;
+  left:0;
+  width:80%;
+  height:80%;
+
+
+}
+</style>
