@@ -5,10 +5,17 @@ import router from '../../router'
 const state = {
   authenticated: !!LocalStorage.get.item('access_token'),
   token: LocalStorage.get.item('access_token'),
-  user: null
+  user: null,
+  fetching: false
 }
 
-const getters = {}
+const getters = {
+  favorites: (state) => {
+    if (state.user) {
+      return state.user.favorites
+    }
+  }
+}
 
 const mutations = {
   login (state) {
@@ -22,6 +29,9 @@ const mutations = {
   },
   setUser (state, user) {
     state.user = user
+  },
+  setFetching (state, status) {
+    state.fetching = status
   }
 }
 
@@ -41,21 +51,19 @@ const actions = {
         console.log(error.message)
       })
   },
-  fetchUser ({commit}) {
+  fetchUser ({commit, state}) {
+    if (!state.user) {
+      commit('setFetching', true)
+    }
     return http.get('users')
       .then(response => {
         let user = response.data
         commit('setUser', user)
+        commit('setFetching', false)
         console.log('user object set')
       }).catch(error => {
         console.log(error)
-        // reject(error.response.status)
-        // if (error.response.status > 400) {
-        //   auth.refresh(this)
-        // }
-        // console.log('Failed to fetch User')
-        // console.log(error.response.status, error.response.statusText)
-      // throw error
+        commit('setFetching', false)
       })
   },
   login ({dispatch}, creds) {

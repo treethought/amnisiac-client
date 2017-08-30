@@ -1,14 +1,17 @@
 <template>
- <div v-if='items'>
+<div>
+  <div v-if='items'>
     <feed-list :items='reversedItems'></feed-list>
-    <!-- <feed-list></feed-list> -->
   </div>
+  <div v-else>
+   <q-inner-loading :visible="fetching" />
+   </div>
+</div>
 </template>
 
 <script>
 // import api from '../../api/api.js'
 import feedList from '../feed/feedList'
-import Player from '../player/Player'
 import toggleSource from '../feed/toggleSources'
 import {mapState} from 'vuex'
 export default {
@@ -19,16 +22,16 @@ export default {
   },
   components: {
     feedList,
-    Player,
     toggleSource
   },
   computed: {
     ...mapState({
       authenticated: state => state.auth.authenticated,
-      user: state => state.auth.user
+      user: state => state.auth.user,
+      fetching: state => state.auth.fetching
     }),
     items () {
-      return this.user.favorites
+      return this.$store.getters['auth/favorites']
     },
     reversedItems: function () {
       return this.reverse(this.items)
@@ -39,7 +42,7 @@ export default {
       return array.slice().reverse()
     }
   },
-  created () {
+  ready () {
     this.$store.dispatch('auth/fetchUser')
     // .then(this.$store.commit('player/setPlaylist', this.reversedItems))
   },
