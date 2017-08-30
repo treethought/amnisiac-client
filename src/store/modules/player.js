@@ -35,12 +35,22 @@ const mutations = {
   },
   setPlaylist (state, items) {
     state.currentPlaylist = items
+    state.currentIdx = 0 // reset idx bc new source brings new 'playlist'
   }
 }
 
 const actions = {
   next ({commit}) {
-
+    let nextIdx = state.currentIdx + 1
+    let nextItem = state.currentPlaylist[nextIdx]
+    let payload = {item: nextItem, idx: nextIdx}
+    commit('selectItem', payload)
+  },
+  previous ({commit}) {
+    let prevIdx = state.currentIdx - 1
+    let prevItem = state.currentPlaylist[prevIdx]
+    let payload = {item: prevItem, idx: prevIdx}
+    commit('selectItem', payload)
   }
 }
 

@@ -18,28 +18,6 @@
 </q-item>
 </q-card>
 
-
- <!--  <div class="item" v-bind:class="{'bg-primary': isActive, 'text-black': isActive}" :item='item'>
-  <!-- <div class='card-content'> -->
-
-  <!--   <i class="item-primary fa fa-play" v-on:click='clickItem'></i>
-    <div class="item-content has-secondary">
-
-    <div class='item-label'>
-      <i v-if="item.source === 'reddit'" class="fa fa-reddit">  {{item.raw_title}}</i>
-      
-    </div>
-    <div class='item-label item-smaller'>
-      {{item.subreddit}}
-    </div>
-
-    </div>
-    <div v-if='user' class="item-secondary">
-    <i v-if='inFavorites' class="fa fa-star" v-on:click='removeItem'></i>
-    <i v-else class="item-secondary fa fa-star-o" v-on:click='saveItem'></i>
-    </div> -->
-  <!-- </div> -->
-<!--   </div> --> 
 </div>
  
 </template>
@@ -48,18 +26,32 @@
 // import auth from '../../auth/index.js'
 import api from '../../api/api.js'
 import { Toast } from 'quasar'
+import {mapState} from 'vuex'
 export default {
   name: 'item',
-  props: ['item', 'idx', 'currentIdx'],
-  store: ['user', 'currentlyPlaying'],
+  props: ['item', 'idx'],
+  // store: ['user', 'currentlyPlaying'],
+  data () {
+    return {
+      payload: { item: this.item, idx: this.idx }
+    }
+  },
   computed: {
+    ...mapState({
+      user: state => state.auth.user,
+      currentlyPlaying: state => state.player.currentlyPlaying,
+      currentIdx: state => state.player.currentIdx,
+      currentItem: state => state.player.currentItem
+    }),
     title: function () {
       if (this.item) {
         return this.item.raw_title
       }
     },
     isActive: function () {
-      return this.currentIdx === this.idx
+      if (this.currentItem) {
+        return this.currentItem.track_id === this.item.track_id
+      }
     },
     isPlaying: function () {
       return this.isActive && this.currentlyPlaying
@@ -74,7 +66,8 @@ export default {
     clickItem (event) {
       console.log('clicked ' + this.item)
       console.log('clicked index ' + this.idx)
-      this.$root.$emit('select-item', this.item, this.idx)
+      this.$store.commit('player/selectItem', this.payload)
+      // this.$root.$emit('select-item', this.item, this.idx)
     },
     saveItem (event) {
       console.log('Saving item to favorites')

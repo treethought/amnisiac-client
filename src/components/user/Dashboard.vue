@@ -23,9 +23,10 @@ import api from '../../api/api.js'
 import feedList from '../feed/feedList'
 import Player from '../player/Player'
 import toggleSource from '../feed/toggleSources'
+import {mapState} from 'vuex'
 export default {
   name: 'dashboard',
-  store: ['user', 'authenticated'],
+  // store: ['user', 'authenticated'],
   data () {
     return {
       items: [],
@@ -33,23 +34,11 @@ export default {
       alertError: false
     }
   },
-  // watch: {
-  //   isLoading: function () {
-  //     if (this.isLoading) {
-  //       Loading.show({
-  //         message: 'Fetching from your sources',
-  //         messageColor: 'purple',
-  //         spinner: 'dots',
-  //         spinnerSize: 250, // in pixels
-  //         spinnerColor: '#f034a3'
-  //       })
-  //     }
-  //     else {
-  //       Loading.hide()
-  //     }
-  //   }
-  // },
   computed: {
+    ...mapState({
+      authenticated: state => state.auth.authenticated,
+      user: state => state.auth.user
+    }),
     redditQuery: function () {
       var sourceNames = []
       if (this.user) {

@@ -1,6 +1,6 @@
 <template>
 
-  <q-layout ref='layout' view="hHh LpR FFF">
+  <q-layout ref='layout' view="hHh LpR FFF" class='bg-tertiary'>
 
     <q-toolbar slot='header'>
       <!-- opens drawer below -->
@@ -20,25 +20,6 @@
        </div>
 
     </q-toolbar> 
-
-    <!-- Tabs -->
-<!--     <q-tabs slot='navigation' align='center' inverted>
-      <q-route-tab icon="home" to="/" exact slot="title"    
-      />
-      <q-route-tab icon="radio" to="/listen" exact slot="title"
-      />
-      <q-route-tab icon="favorites" to="/favorites" exact slot="title"
-      />
-      <q-route-tab icon="playlist_play" to="/dashboard" exact slot="title"
-      />
-      <q-tab-pane name='Logout' v-if='authenticated' to="/login" exact @click.native='logout'
-      />
-      </q-tabs> -->
-
-
-
-
-
 
     <!-- Drawer -->
     <div slot="left" class='bg-tertiary'>
@@ -87,46 +68,37 @@
 
     <router-view></router-view>
 
-    <!-- Footer -->
-    <control slot='footer'></control>
-
-<!-- 
-        <q-tabs slot="navigation" class='toolbar justified bg-tertiary desktop-hide' :padding="1">
-          <q-tab icon="radio" route="/listen" exact replace>listen</q-tab>
-          
-          <q-tab v-if='authenticated' icon="favorites" route="/favorites" exact replace>favorites</q-tab>
-          <q-tab v-if='authenticated' icon="playlist_play" route="/dashboard" exact replace>dashboard</q-tab>
-          <q-tab v-if='authenticated' icon="build" route="/manage" exact replace>manage</q-tab>
-          
-          <q-tab class='mobile-only' v-if='authenticated' icon="account_circle" route="/login" exact replace @click.native='logout'>logout</q-tab>
-
-          <q-tab v-if='!authenticated' icon="account_circle" route="/login" exact replace>login</q-tab>
-          <q-tab v-if='!authenticated' icon="supervisor_account" route="/register" exact replace>register</q-tab>
-        </q-tabs> -->
-
+    <q-toolbar slot="footer" class="justify-center" :padding="1">
+        <control v-if='currentItem'></control>
     </q-toolbar>
-   
+
   </q-layout>
 </template>
 
 <script>
-import auth from '../api/auth.js'
+// import auth from '../api/auth.js'
 import Control from './player/Control'
+import { mapState } from 'vuex'
 export default {
   name: 'layout',
-  store: ['authenticated', 'user', 'currentItem'],
+  // store: ['authenticated', 'user', 'currentItem'],
   components: {
     Control
   },
   methods: {
     logout () {
-      auth.logout(this)
+      this.$store.dispatch('auth/logout')
     }
   },
   computed: {
-    title: function () {
+    title () {
       return this.$route.name
-    }
+    },
+    ...mapState({
+      authenticated: state => state.auth.authenticated,
+      user: state => state.auth.user,
+      currentItem: state => state.player.currentItem
+    })
   }
 }
 </script>
@@ -136,6 +108,10 @@ export default {
     margin:0;
     padding:0;
 }
+
+/*.layout-aside {
+  background: #555
+}*/
 
 h4 {
   /*color: purple !important;*/

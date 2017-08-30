@@ -1,9 +1,6 @@
 <template>
-<!-- <div class='card-title'>
- -->
- <!-- <div> -->
-  <!-- <q-toolbar> -->
- <q-tabs v-model="selectedSource" align='center'> <!-- class='toolbar justified bg-tertiary text-primary'> -->
+
+ <q-tabs v-model="activeSource" align='center'> <!-- class='toolbar justified bg-tertiary text-primary'> -->
     <q-tab slot='title' name='all' icon='all' label='all'></q-tab>
 
     <q-tab v-for='source in sources':key='source'
@@ -13,9 +10,6 @@
       :label='source'>
     </q-tab>
   </q-tabs>
-<!-- </q-toolbar> -->
-
-<!-- </div> -->
 
 </template>
 
@@ -23,15 +17,23 @@
   export default {
     name: 'toggle-source',
     props: ['sources'],
-    store: ['selectedSource'],
+    ready () {
+      this.activeSource = this.selectedSource
+    },
+    data () {
+      return {
+        activeSource: 'all'
+      }
+    },
     computed: {
-      sourceList: function () {
-        var sources = []
-        for (var i = 0; i < this.user.favorites.length; i++) {
-          var s = this.user.favorites[i].subreddit
-          sources.push(s)
-        }
-        return [...new Set(sources)]
+      selectedSource () {
+        return this.$store.state.player.selectedSource
+      }
+    },
+    watch: {
+      activeSource () {
+        console.log('setting source')
+        this.$store.commit('player/setSelectedSource', this.activeSource)
       }
     }
   }

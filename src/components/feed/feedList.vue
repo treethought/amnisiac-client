@@ -2,42 +2,25 @@
 
 <div>
 
-  <player :items='filteredItems'></player>
+  <!-- <player :items='filteredItems'></player> -->
+  <player></player>
 
   <q-card flat v-if='items' class='bg-tertiary'>
     <q-card-title>
     <toggle-source  :sources='sources'></toggle-source>
     </q-card-title>
-     <q-list class='bg-white'>
-        <q-list-header>Feed</q-list-header>
+     <q-list class='bg-tertiary text-white'>
+        <!-- <q-list-header>Feed</q-list-header> -->
         <item v-for='(item, idx) in filteredItems'
                 :item='item'
                 :idx=idx
-                :key='item.key'
-                :currentIdx='currentIdx'>
+                :key='item.key'>
         </item>
 
       </q-list>
 
   </q-card>
 
-
-
-
-   <!--  <div v-if='items' class=' bg-tertiary'>
-      <toggle-source  :sources='sources'></toggle-source>
-
-      <q-list >
-        <q-list-header>Feed</q-list-header>
-        <item v-for='(item, idx) in filteredItems'
-                :item='item'
-                :idx=idx
-                :key='item.key'
-                :currentIdx='currentIdx'>
-        </item>
-
-      </q-list>
-    </div> -->
 
 </div>
 </template>
@@ -46,6 +29,7 @@
   import Item from './Item'
   import toggleSource from './toggleSources'
   import Player from '../player/Player'
+  import {mapState} from 'vuex'
   export default {
     name: 'feed-list',
     components: {
@@ -54,18 +38,19 @@
       Player
     },
     props: ['items', 'title'],
-    store: ['selectedSource'],
     data () {
-      return {
-        isLoading: null,
-        alertError: false,
-        currentIdx: 0
+      return {}
+    },
+    watch: {
+      filteredItems (newPlaylist) {
+        this.$store.commit('player/setPlaylist', newPlaylist)
       }
     },
     computed: {
-      itemLength: function () {
-        return this.items.length
-      },
+      ...mapState({
+        currentIdx: state => state.player.currentIdx,
+        selectedSource: state => state.player.selectedSource
+      }),
       filteredItems: function () {
         if (this.selectedSource === 'all') { return this.items }
         var filtered = []
@@ -75,7 +60,7 @@
             filtered.push(this.items[i])
           }
         }
-        return filtered
+        return [...new Set(filtered)]
       },
       sources: function () {
         var sources = []
@@ -86,17 +71,6 @@
           }
         }
         return [...new Set(sources)]
-      }
-    },
-    created () {
-      this.$root.$on('item-loaded', this.highLightItem)
-      this.selectedSource = 'all'
-    },
-    methods: {
-      highLightItem (item, idx) {
-        console.log('DETECTED Item SELECTED')
-        console.log(item, idx)
-        this.currentIdx = idx
       }
     }
   }

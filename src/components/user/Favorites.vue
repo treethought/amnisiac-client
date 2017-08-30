@@ -1,22 +1,21 @@
 <template>
  <div v-if='items'>
     <feed-list :items='reversedItems'></feed-list>
+    <!-- <feed-list></feed-list> -->
   </div>
 </template>
 
 <script>
-import api from '../../api/api.js'
+// import api from '../../api/api.js'
 import feedList from '../feed/feedList'
 import Player from '../player/Player'
 import toggleSource from '../feed/toggleSources'
+import {mapState} from 'vuex'
 export default {
   name: 'favorites',
-  store: ['user', 'authenticated'],
+  // store: ['user', 'authenticated'],
   data () {
-    return {
-      isLoading: false,
-      alertError: false
-    }
+    return {}
   },
   components: {
     feedList,
@@ -24,19 +23,15 @@ export default {
     toggleSource
   },
   computed: {
-    items: function () { // computed so that it updates when removing favorited items?
+    ...mapState({
+      authenticated: state => state.auth.authenticated,
+      user: state => state.auth.user
+    }),
+    items () {
       return this.user.favorites
     },
     reversedItems: function () {
       return this.reverse(this.items)
-    },
-    sources: function () {
-      var sources = []
-      for (var i = 0; i < this.user.favorites.length; i++) {
-        var s = this.user.favorites[i].subreddit
-        sources.push(s)
-      }
-      return [...new Set(sources)]
     }
   },
   methods: {
@@ -44,8 +39,9 @@ export default {
       return array.slice().reverse()
     }
   },
-  beforeCreate () {
-    api.fetchUser(this)
+  created () {
+    this.$store.dispatch('auth/fetchUser')
+    // .then(this.$store.commit('player/setPlaylist', this.reversedItems))
   },
   route: {
     // Check the users auth status before allowing access
