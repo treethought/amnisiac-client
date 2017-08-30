@@ -5,7 +5,7 @@
   <q-card-title slot='overlay' class='text-primary'>{{currentItem.raw_title}}</q-card-title>
     <q-card-media overlay-position="top">
      
-        <youtube v-model='player' :video-id.sync="currentItem.track_id" @ready="playerReady" @playing="playing"
+        <youtube v-model='player' :video-id.sync="currentItem.track_id" @ready="playerReady" @playing="playing" @ended='ended'
                  :player-vars="{autoplay: 1, controls: 1, color: 'white', enablejsapi: 1, playsinline: 1, rel: 0, showinfo: 0,
                  widget_referrer: 'www.amnisiac.com'}"
                  class=''
@@ -23,7 +23,6 @@
 import {mapState} from 'vuex'
 export default {
   name: 'player',
-  // props: ['items'],
   computed: {
     ...mapState({
       currentItem: state => state.player.currentItem,
@@ -67,6 +66,9 @@ export default {
     pause () {
       this.player.pauseVideo()
       this.$store.commit('player/setPlaying', false)
+    },
+    ended () {
+      this.$store.dispatch('player/next')
     }
 
   }

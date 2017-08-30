@@ -33,6 +33,9 @@
       toggleSource
     },
     props: ['items', 'title'],
+    created () {
+      this.$store.commit('player/setPlaylist', this.filteredItems)
+    },
     data () {
       return {}
     },
