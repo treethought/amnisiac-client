@@ -66,6 +66,8 @@
     <!-- </q-list> -->
     </div>
 
+    <player></player>
+
     <router-view></router-view>
 
     <q-toolbar slot="footer" class="justify-center" :padding="1">
@@ -78,12 +80,14 @@
 <script>
 // import auth from '../api/auth.js'
 import Control from './player/Control'
+import Player from './player/Player'
 import { mapState } from 'vuex'
 export default {
   name: 'layout',
   // store: ['authenticated', 'user', 'currentItem'],
   components: {
-    Control
+    Control,
+    Player
   },
   methods: {
     logout () {

@@ -2,9 +2,6 @@
 
 <div>
 
-  <!-- <player :items='filteredItems'></player> -->
-  <player></player>
-
   <q-card flat v-if='items' class='bg-tertiary'>
     <q-card-title>
     <toggle-source  :sources='sources'></toggle-source>
@@ -28,14 +25,12 @@
 <script>
   import Item from './Item'
   import toggleSource from './toggleSources'
-  import Player from '../player/Player'
   import {mapState} from 'vuex'
   export default {
     name: 'feed-list',
     components: {
       Item,
-      toggleSource,
-      Player
+      toggleSource
     },
     props: ['items', 'title'],
     data () {
