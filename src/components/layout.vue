@@ -66,13 +66,11 @@
     <!-- </q-list> -->
     </div>
 
-    <player></player>
+    <player v-if='currentItem'></player>
 
     <router-view></router-view>
 
-    <q-toolbar slot="footer" class="justify-center" :padding="1">
-        <control v-if='currentItem'></control>
-    </q-toolbar>
+    <control slot="footer" v-if='currentItem'></control>
 
   </q-layout>
 </template>

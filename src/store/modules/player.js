@@ -5,7 +5,10 @@ const state = {
   currentItem: null,
   currentlyPlaying: false,
   playerVisible: false,
-  currentIdx: 0
+  currentIdx: 0,
+  currentTime: 0,
+  targetTime: 0,
+  currentDuration: null
 }
 
 const getters = {
@@ -32,14 +35,34 @@ const mutations = {
   selectItem (state, {item, idx}) {
     state.currentItem = item
     state.currentIdx = idx
+    state.currentTime = 0
+    state.currentDuration = 0
+    state.seekTime = 0
+    console.log('new item, time and duration set to 0')
   },
   setPlaylist (state, items) {
     state.currentPlaylist = items
     state.currentIdx = 0 // reset idx bc new source brings new 'playlist'
+  },
+  setTime (state, time) {
+    state.currentTime = time
+  },
+  setDuration (state, duration) {
+    state.currentDuration = duration
+    console.log('duration set to ' + duration)
+  },
+  seekTime (state, time) {
+    state.targetTime = time
   }
 }
 
 const actions = {
+  setTime ({commit}, time) {
+    commit('setTime', time)
+  },
+  setDuration ({commit}, duration) {
+    commit('setDuration', duration)
+  },
   next ({commit}) {
     let nextIdx = state.currentIdx + 1
     let nextItem = state.currentPlaylist[nextIdx]

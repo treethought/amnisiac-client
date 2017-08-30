@@ -1,7 +1,7 @@
 <template>
 <div class='player' v-if='currentItem'>
 
-  <q-card v-show='playerVisible' class='bg-secondary text-center '>
+  <q-card v-show='playerVisible' class='bg-secondary text-center'>
   <q-card-title slot='overlay' class='text-primary'>{{currentItem.raw_title}}</q-card-title>
     <q-card-media overlay-position="top">
      
@@ -26,12 +26,15 @@ export default {
   computed: {
     ...mapState({
       currentItem: state => state.player.currentItem,
-      playerVisible: state => state.player.playerVisible
+      playerVisible: state => state.player.playerVisible,
+      targetTime: state => state.player.targetTime
     })
   },
   data () {
     return {
-      player: null
+      player: null,
+      time: 0,
+      tracker: 0
     }
   },
   created () {
@@ -39,7 +42,28 @@ export default {
     this.$root.$on('pause', this.pause)
     this.$root.$on('resume', this.resume)
   },
+  watch: {
+    targetTime (newTime) {
+      console.log('Detected new target time')
+      this.seek(newTime)
+    },
+    currentItem () {
+      if (this.tracker) {
+        clearInterval(this.tracker)
+      }
+    }
+  },
   methods: {
+    trackTime () {
+      this.tracker = setInterval(this.getTime, 100)
+    },
+    getTime () {
+      this.time = parseInt(this.player.getCurrentTime())
+      this.$store.dispatch('player/setTime', this.time)
+    },
+    seek (time) {
+      this.player.seekTo(time, true)
+    },
     playerReady (player) {
       this.player = player
       this.player.playVideo()
@@ -47,6 +71,8 @@ export default {
     playing (player) {
       console.log('Video playing')
       this.$store.commit('player/setPlaying', true)
+      this.$store.commit('player/setDuration', parseInt(this.player.getDuration()))
+      this.trackTime()
     },
     change () {
       // when you change the value, the player will also change.
@@ -58,17 +84,24 @@ export default {
     resume () {
       this.player.playVideo()
       this.$store.commit('player/setPlaying', true)
+      this.trackTime()
     },
     stop () {
       this.player.stopVideo()
       this.$store.commit('player/setPlaying', false)
+      clearInterval(this.tracker)
+      this.$store.commit('player/setDuration', 0)
     },
     pause () {
       this.player.pauseVideo()
       this.$store.commit('player/setPlaying', false)
+      clearInterval(this.tracker)
     },
     ended () {
       this.$store.dispatch('player/next')
+      clearInterval(this.tracker)
+      this.$store.dispatch('player/setTime', 0)
+      this.$store.commit('player/setDuration', 0)
     }
 
   }
