@@ -1,9 +1,11 @@
 <template>
 
   <q-toolbar  class="justify-center" :padding="1">
+    <q-inner-loading dark :visible='buffering'>
+      <q-spinner-bars size="60px" color="primary" />
+    </q-inner-loading>
 
-
-  <q-toolbar-title  class='text-center col-6'>
+  <q-toolbar-title  class='text-center col-6 relative-position'>
 
     {{currentItem.raw_title}}<br>
 
@@ -26,10 +28,10 @@
         </q-btn><br>
       </div>
 
-
-      <div>
+      <div class='relative-position'>
         <q-slider :disable='currentDuration < currentTime' :value='currentTime' @change='seekTime' label :min='0' :max='currentDuration'></q-slider>
       </div>
+     
 
     </q-toolbar-title>
 
@@ -63,6 +65,7 @@ export default {
   computed: {
     ...mapState({
       currentlyPlaying: state => state.player.currentlyPlaying,
+      buffering: state => state.player.buffering,
       currentItem: state => state.player.currentItem,
       playerVisible: state => state.player.playerVisible,
       currentTime: state => state.player.currentTime,

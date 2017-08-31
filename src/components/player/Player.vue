@@ -5,8 +5,9 @@
   <q-card-title slot='overlay' class='text-primary'>{{currentItem.raw_title}}</q-card-title>
     <q-card-media overlay-position="top">
      
-        <youtube v-model='player' :video-id.sync="currentItem.track_id" @ready="playerReady" @playing="playing" @ended='ended'
-                 :player-vars="{autoplay: 1, controls: 1, color: 'white', enablejsapi: 1, playsinline: 1, rel: 0, showinfo: 0,
+        <youtube v-model='player' :video-id.sync="currentItem.track_id"
+                 @ready="playerReady" @playing="playing" @ended='ended' @buffering='buffering' @error='onError'
+                 :player-vars="{autoplay: 1, controls: 0, color: 'white', enablejsapi: 1, playsinline: 1, rel: 0, showinfo: 0,
                  widget_referrer: 'www.amnisiac.com'}"
                  class=''
         ></youtube>
@@ -71,10 +72,12 @@ export default {
     playing (player) {
       console.log('Video playing')
       this.$store.commit('player/setPlaying', true)
+      this.$store.commit('player/setBuffering', false)
       this.$store.commit('player/setDuration', parseInt(this.player.getDuration()))
       this.trackTime()
     },
     change () {
+      console.log('CHANGING FOOL')
       // when you change the value, the player will also change.
       // If you would like to change `playerVars`, please change it before you change `videoId`.
       // If `playerVars.autoplay` is 1, `loadVideoById` will be called.
@@ -101,7 +104,14 @@ export default {
       this.$store.dispatch('player/next')
       clearInterval(this.tracker)
       this.$store.dispatch('player/setTime', 0)
-      this.$store.commit('player/setDuration', 0)
+      this.$store.commit('player/setDuration', 1)
+    },
+    buffering () {
+      console.log('player buffering')
+      this.$store.commit('player/setBuffering', true)
+    },
+    onError () {
+      console.log('ERROR')
     }
 
   }

@@ -4,6 +4,7 @@ const state = {
   currentPlaylist: [],
   currentItem: null,
   currentlyPlaying: false,
+  buffering: false,
   playerVisible: false,
   currentIdx: 0,
   currentTime: 0,
@@ -29,6 +30,9 @@ const mutations = {
   setPlaying (state, status) {
     state.currentlyPlaying = status
   },
+  setBuffering (state, status) {
+    state.buffering = status
+  },
   setPlayerVisible (state, status) {
     state.playerVisible = status
   },
@@ -36,7 +40,7 @@ const mutations = {
     state.currentItem = item
     state.currentIdx = idx
     state.currentTime = 0
-    state.currentDuration = 0
+    state.currentDuration = 1
     state.seekTime = 0
     console.log('new item, time and duration set to 0')
   },

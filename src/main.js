@@ -41,7 +41,8 @@ import Quasar, {
   QInput,
   QAlert,
   QModal,
-  QSlider
+  QSlider,
+  QSpinnerBars
 }
   from 'quasar' // use this
 
@@ -75,7 +76,8 @@ Vue.use(Quasar, {
     QInput,
     QAlert,
     QModal,
-    QSlider
+    QSlider,
+    QSpinnerBars
   }
 }) // Install Quasar Framework
 Vue.use(VueYouTubeEmbed)
