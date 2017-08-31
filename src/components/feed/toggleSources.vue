@@ -22,7 +22,7 @@
     },
     data () {
       return {
-        activeSource: 'all'
+        activeSource: null
       }
     },
     computed: {
