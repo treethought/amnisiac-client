@@ -23,11 +23,11 @@
                 
     </multiselect>
 
-     <q-card-action>
+     <q-card-actions>
       <q-btn @click="submitSearch">
         Submit
       </q-btn>
-    </q-card-action>
+    </q-card-actions>
     </q-card-main>
    
   </q-card>

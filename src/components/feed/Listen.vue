@@ -10,11 +10,8 @@
     <feed-list :items='items'></feed-list>
   </div>
 
-  <div v-if="isLoading">
-    <h1>Loading</h1>
-      <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
-      <span class="sr-only">Loading...</span>
-  </div>
+   <q-inner-loading :visible="isLoading" />
+
 
   <div v-if='alertError'>
     <p>Sorry, an error occured when contacting the server</p>
@@ -33,12 +30,16 @@ import toggleSource from './toggleSources'
 
 export default {
   name: 'feed-index',
-  store: ['selectedSource'],
   components: {
     Player,
     feedList,
     searchField,
     toggleSource
+  },
+  computed: {
+    selectedSource () {
+      return this.$store.state.selectedSource
+    }
   },
   data () {
     return {

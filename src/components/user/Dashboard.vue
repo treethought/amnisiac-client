@@ -21,7 +21,6 @@
 // import auth from '../../auth/index.js'
 import api from '../../api/api.js'
 import feedList from '../feed/feedList'
-import Player from '../player/Player'
 import toggleSource from '../feed/toggleSources'
 import {mapState} from 'vuex'
 export default {
@@ -51,7 +50,6 @@ export default {
   },
   components: {
     feedList,
-    Player,
     toggleSource
   },
   beforeCreate () {
