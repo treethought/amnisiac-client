@@ -1,6 +1,6 @@
-# Quasar App
+# Amnisiac
 
-> A Quasar project
+> Front end client for amnisiac written with Vue.js and Quasar
 
 ## Build Setup
 
@@ -17,3 +17,8 @@ $ quasar build
 # lint code
 $ quasar lint
 ```
+
+## Cordova
+```bash
+$ cd cordova
+$ cordova run android
