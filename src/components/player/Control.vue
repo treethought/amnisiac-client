@@ -11,7 +11,7 @@
 
       <div class="group text-center">
   
-        <q-btn flat  v-on:click.stop="previous">
+        <q-btn flat  v-on:click.stop="selectPrevious">
           <q-icon name="skip_previous" color='primary' />
         </q-btn>  
 
@@ -23,13 +23,13 @@
           <q-icon name="play_arrow" color='primary' />
         </q-btn> 
 
-        <q-btn flat v-on:click.stop="next">
+        <q-btn flat v-on:click.stop="selectNext">
           <q-icon name="skip_next" color='primary' />
         </q-btn><br>
       </div>
 
       <div class='relative-position'>
-        <q-slider :disable='currentDuration < currentTime' :value='currentTime' @change='seekTime' label :min='0' :max='currentDuration'></q-slider>
+        <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' label :min='0' :max='currentDuration'></q-slider>
       </div>
      
 
@@ -58,10 +58,9 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 export default {
   name: 'control',
-  // store: ['currentItem', 'currentlyPlaying', 'playerVisible'],
   computed: {
     ...mapState({
       currentlyPlaying: state => state.player.currentlyPlaying,
@@ -73,21 +72,16 @@ export default {
     })
   },
   methods: {
-    seekTime (newTime) {
-      console.log('seeking to time')
-      this.$store.commit('player/seekTime', newTime)
-    },
-    previous () {
-      this.$store.dispatch('player/previous')
-    },
+    ...mapActions('player', [
+      'seekTime',
+      'selectNext',
+      'selectPrevious'
+    ]),
     pause () {
       this.$root.$emit('pause')
     },
     resume () {
       this.$root.$emit('resume')
-    },
-    next () {
-      this.$store.dispatch('player/next')
     },
     togglePlayer () {
       let status = !this.playerVisible

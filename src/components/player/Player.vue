@@ -1,36 +1,31 @@
 <template>
-<div class='player' v-if='currentItem'>
 
   <q-card v-show='playerVisible' class='bg-secondary text-center'>
   <q-card-title slot='overlay' class='text-primary'>{{currentItem.raw_title}}</q-card-title>
     <q-card-media overlay-position="top">
      
         <youtube v-model='player' :video-id.sync="currentItem.track_id"
-                 @ready="playerReady" @playing="playing" @ended='ended' @buffering='buffering' @error='onError'
+                 @ready="playerReady"
+                 @qued='playerReady'
+                 @playing="setPlaying"
+                 @paused='setPaused'
+
+                 @ended='selectNext'
+                 @error='onError'
                  :player-vars="{autoplay: 1, controls: 0, color: 'white', enablejsapi: 1, playsinline: 1, rel: 0, showinfo: 0,
                  widget_referrer: 'www.amnisiac.com'}"
                  class=''
         ></youtube>
   </q-card-media>
   </q-card> 
-</div>
-
-
 
 </template>
 
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
   name: 'player',
-  computed: {
-    ...mapState({
-      currentItem: state => state.player.currentItem,
-      playerVisible: state => state.player.playerVisible,
-      targetTime: state => state.player.targetTime
-    })
-  },
   data () {
     return {
       player: null,
@@ -39,76 +34,68 @@ export default {
     }
   },
   created () {
-    this.$root.$on('previous', this.previous)
+    // responds to events emitted from Control
     this.$root.$on('pause', this.pause)
     this.$root.$on('resume', this.resume)
   },
+  destroyed () {
+    this.$root.$off('pause')
+    this.$root.$off('resume')
+  },
   watch: {
+    trackTime (status) {
+      if (status) { this.startTracking() }
+      else { clearInterval(this.tracker) }
+    },
     targetTime (newTime) {
       console.log('Detected new target time')
       this.seek(newTime)
     },
     currentItem () {
-      if (this.tracker) {
-        clearInterval(this.tracker)
-      }
+      this.setDuration(parseInt(this.player.getDuration()))
     }
   },
+  computed: {
+    ...mapState({
+      currentItem: state => state.player.currentItem,
+      playerVisible: state => state.player.playerVisible,
+      targetTime: state => state.player.targetTime,
+      trackTime: state => state.player.trackTime
+    })
+  },
   methods: {
-    trackTime () {
-      this.tracker = setInterval(this.getTime, 100)
-    },
-    getTime () {
-      this.time = parseInt(this.player.getCurrentTime())
-      this.$store.dispatch('player/setTime', this.time)
-    },
-    seek (time) {
-      this.player.seekTo(time, true)
-    },
+    // commits to sync player status with store
+    ...mapMutations('player', [
+      'setPlaying', // map `this.increment()` to `this.$store.dispatch('increment')`
+      'setPaused',
+      'setBuffering', // maybe set as callback for @buffering from player
+      'setDuration'
+    ]),
+    // actions to sync time
+    ...mapActions('player', [
+      'selectNext',
+      'setTime'
+    ]),
     playerReady (player) {
+      console.log('player ready')
       this.player = player
       this.player.playVideo()
     },
-    playing (player) {
-      console.log('Video playing')
-      this.$store.commit('player/setPlaying', true)
-      this.$store.commit('player/setBuffering', false)
-      this.$store.commit('player/setDuration', parseInt(this.player.getDuration()))
-      this.trackTime()
-    },
-    change () {
-      console.log('CHANGING FOOL')
-      // when you change the value, the player will also change.
-      // If you would like to change `playerVars`, please change it before you change `videoId`.
-      // If `playerVars.autoplay` is 1, `loadVideoById` will be called.
-      // If `playerVars.autoplay` is 0, `cueVideoById` will be called.
-      // this.videoId = 'another video id'
-    },
     resume () {
       this.player.playVideo()
-      this.$store.commit('player/setPlaying', true)
-      this.trackTime()
-    },
-    stop () {
-      this.player.stopVideo()
-      this.$store.commit('player/setPlaying', false)
-      clearInterval(this.tracker)
-      this.$store.commit('player/setDuration', 0)
     },
     pause () {
       this.player.pauseVideo()
-      this.$store.commit('player/setPlaying', false)
-      clearInterval(this.tracker)
     },
-    ended () {
-      this.$store.dispatch('player/next')
-      clearInterval(this.tracker)
-      this.$store.dispatch('player/setTime', 0)
-      this.$store.commit('player/setDuration', 1)
+    startTracking () {
+      this.tracker = setInterval(this.getTime, 100)
     },
-    buffering () {
-      console.log('player buffering')
-      this.$store.commit('player/setBuffering', true)
+    getTime () {
+      let time = parseInt(this.player.getCurrentTime())
+      this.setTime(time)
+    },
+    seek (time) {
+      this.player.seekTo(time, true)
     },
     onError () {
       console.log('ERROR')
