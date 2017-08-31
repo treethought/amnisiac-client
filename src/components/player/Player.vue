@@ -3,7 +3,7 @@
   <q-card v-show='playerVisible' class='bg-secondary text-center'>
   <q-card-title slot='overlay' class='text-primary'>{{currentItem.raw_title}}</q-card-title>
     <q-card-media overlay-position="top">
-     
+
         <youtube v-model='player' :video-id.sync="currentItem.track_id"
                  @ready="playerReady"
                  @qued='playerReady'
@@ -14,10 +14,10 @@
                  @error='onError'
                  :player-vars="{autoplay: 1, controls: 0, color: 'white', enablejsapi: 1, playsinline: 1, rel: 0, showinfo: 0,
                  widget_referrer: 'www.amnisiac.com'}"
-                 class=''
+                 player-width='100%'
         ></youtube>
   </q-card-media>
-  </q-card> 
+  </q-card>
 
 </template>
 
@@ -112,20 +112,18 @@ export default {
 
   .video-container {
   position:relative;
-  padding-bottom:56.25%;
-  /*padding-bottom: 20%;*/
+  padding-bottom:56.25%; /* 16:9 */
   padding-top:30px;
   height:0;
   overflow:hidden;
 }
 
 .video-container iframe, .video-container object, .video-container embed {
-  position:absolute;
+  position: absolute;
   top:0;
   left:0;
   width:80%;
   height:80%;
-
 
 }
 </style>
