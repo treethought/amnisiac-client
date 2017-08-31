@@ -67,7 +67,6 @@ export default {
       console.log('clicked ' + this.item)
       console.log('clicked index ' + this.idx)
       this.$store.commit('player/selectItem', this.payload)
-      // this.$root.$emit('select-item', this.item, this.idx)
     },
     saveItem (event) {
       console.log('Saving item to favorites')
