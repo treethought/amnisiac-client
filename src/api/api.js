@@ -29,7 +29,7 @@ export default {
     console.log('Fetching items with query')
     context.isLoading = true
 
-    return http.get('search', {
+    return http.get('reddit/search', {
       params: {
         reddit_query: reddit,
         sc_query: sc
@@ -45,7 +45,7 @@ export default {
         context.isLoading = false
         context.alertError = true
         console.log('error fetching items from query')
-        console.log(error.status, error.statusText)
+        console.log(error)
       // throw error
       // console.log(r)
       })
@@ -61,7 +61,7 @@ export default {
       .catch(error => {
         context.isLoading = false
         context.alertError = true
-        console.log(error.status, error.statusText)
+        console.log(error)
       // throw error
       })
   },
@@ -75,7 +75,7 @@ export default {
         console.log('Successfully saved item')
       }).catch(error => {
         console.log('error saving favorite')
-        console.log(error.status, error.statusText)
+        console.log(error)
       // throw error
       })
   },
@@ -89,7 +89,7 @@ export default {
       }).catch(error => {
         // error callback
         console.log('error removing favorite')
-        console.log(error.status, error.statusText)
+        console.log(error)
         console.log(error.data)
       // throw error
       })
@@ -106,7 +106,7 @@ export default {
           auth.refresh(this, redirect)
         }
         console.log('Failed to fetch User')
-        console.log(error.response.status, error.response.statusText)
+        console.log(error)
       // throw error
       }).then(response => {
         if (redirect) {

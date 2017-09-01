@@ -37,7 +37,7 @@ const mutations = {
 
 const actions = {
   authorize ({commit}, creds) {
-    return http.post('auth', creds)
+    return http.post('auth/login', creds)
       .then(response => {
         console.log('setting tokens')
         LocalStorage.set('access_token', response.data.access_token)
