@@ -51,6 +51,21 @@ const actions = {
         console.log(error.message)
       })
   },
+  createUser ({commit}, creds) {
+    return http.post('auth/register', creds)
+      .then(response => {
+        console.log('setting tokens')
+        LocalStorage.set('access_token', response.data.access_token)
+        LocalStorage.set('refresh_token', response.data.refresh_token)
+        commit('setToken', response.data.access_token)
+        commit('setAuthenticated', true)
+      })
+      .catch(error => {
+        // context.commit('setAuthenticated', false)
+        console.log('Auth failed')
+        console.log(error.message)
+      })
+  },
   fetchUser ({commit, state}) {
     if (!state.user) {
       commit('setFetching', true)
@@ -68,6 +83,11 @@ const actions = {
   },
   login ({dispatch}, creds) {
     return dispatch('authorize', creds).then(() => {
+      dispatch('fetchUser').then(router.push('favorites'))
+    })
+  },
+  register ({dispatch}, creds) {
+    return dispatch('createUser', creds).then(() => {
       dispatch('fetchUser').then(router.push('favorites'))
     })
   },

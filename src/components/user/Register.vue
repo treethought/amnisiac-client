@@ -42,18 +42,18 @@
 </template>
 
 <script>
-import auth from '../../api/auth.js'
-// import router from '../router/index.js'
-// import api from '../api/api.js'
+import {mapState} from 'vuex'
 export default {
-  name: 'login',
   mounted () {
-    this.$refs.regModal.open()
+    if (!this.authenticated) {
+      this.$refs.regModal.open()
+    }
   },
   computed: {
-    authenticated () {
-      return this.$store.state.authenticated
-    }
+    ...mapState({
+      authenticated: state => state.auth.authenticated,
+      user: state => state.auth.user
+    })
   },
   data () {
     return {
@@ -70,13 +70,7 @@ export default {
         username: this.username,
         password: this.password
       }
-      // We need to pass the component's this context
-      // to properly make use of http in the auth service
-      // login method will update this/context's $store
-      auth.register(this, payload)
-      // .then(api.fetchUser(this, 'dashboard'))
-      // .then(router.push('favorites'))
-      // api.fetchUser(this, 'dashboard')
+      this.$store.dispatch('auth/register', payload)
     }
   }
 }
