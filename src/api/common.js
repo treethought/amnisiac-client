@@ -4,8 +4,7 @@ import { LocalStorage } from 'quasar'
 
 // The object to be passed as a header for authenticated requests
 function getAuthHeader () {
-  // var tokenString = 'Bearer ' + window.localStorage.getItem('access_token')
-  console.log('Creating tokenString')
+  // console.log('Creating tokenString')
   var tokenString = 'Bearer ' + LocalStorage.get.item('access_token')
   return tokenString
 }
@@ -24,4 +23,25 @@ http.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
-export { http }
+// For refreshing tokens //
+function getRefreshHeader () {
+  console.log('Creating refresh header')
+  var tokenString = 'Bearer ' + LocalStorage.get.item('refresh_token')
+  return tokenString
+}
+
+const httpRefresh = axios.create({
+  baseURL: process.env.API_URL
+})
+
+// Add a request interceptor
+httpRefresh.interceptors.request.use(function (config) {
+  // Do something before request is sent
+  config.headers = {Authorization: getRefreshHeader()}
+  return config
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error)
+})
+
+export { http, httpRefresh }
