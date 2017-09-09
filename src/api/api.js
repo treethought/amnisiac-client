@@ -67,8 +67,7 @@ export default {
   },
   saveItem (context) {
     console.log('Saving item to favorites')
-
-    http.post('users/favorites', {item: context.item})
+    return http.post('users/favorites', {item: context.item})
       .then(response => {
         console.log(response.status)
         context.$store.user = response.data // response has updated User object
@@ -81,7 +80,7 @@ export default {
   },
   removeItem (context) {
     console.log('Removing item to favorites')
-    http.put('users/favorites', {item: context.item})
+    return http.put('users/favorites', {item: context.item})
       .then(response => {
         console.log(response.status)
         context.$store.user = response.data
