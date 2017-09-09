@@ -70,46 +70,49 @@ export default {
     },
     saveItem (event) {
       console.log('Saving item to favorites')
-      api.saveItem(this) // should update user
-      this.$root.$emit('update-user') // todo\
-      Toast.create({
-        html: 'Saved ' + this.item.raw_title + 'to favorites!',
-        icon: 'star',
-        timeout: 2500,
-        color: '#f8c1c1',
-        bgColor: 'black'
-        // button: {
-        //   label: 'Undo',
-        //   handler () {
-        //     // Specify what to do when button is clicked/tapped
-        //   },
-        //   color: 'white'
-        // }
-      })
+      api.saveItem(this)
+        .then(this.$store.dispatch('auth/fetchUser'))
+        .then(Toast.create({
+          html: 'Saved ' + this.item.raw_title + 'to favorites!',
+          icon: 'star',
+          timeout: 2500,
+          color: '#f8c1c1',
+          bgColor: 'black'
+          // button: {
+          //   label: 'Undo',
+          //   handler () {
+          //     // Specify what to do when button is clicked/tapped
+          //   },
+          //   color: 'white'
+          // }
+        })
+        )
     },
     removeItem (event) {
       api.removeItem(this)
       // var self = this
-      Toast.create({
-        html: 'Removed ' + this.item.raw_title + 'from favorites!',
-        icon: 'delete',
-        timeout: 2500,
-        color: '#f8c1c1',
-        bgColor: 'black',
-        button: {
-          label: 'Undo',
-          handler (event) {
-            // self.saveItem(event)
-            // Specify what to do when button is clicked/tapped
-            // console.log('in handler, before call')
-            // console.log(self.user.length)
-            // api.saveItem(self)
-            // console.log('after call')
-            // console.log(self.user.length)
-          },
-          color: 'white'
-        }
-      })
+        .then(this.$store.dispatch('auth/fetchUser'))
+        .then(Toast.create({
+          html: 'Removed ' + this.item.raw_title + 'from favorites!',
+          icon: 'delete',
+          timeout: 2500,
+          color: '#f8c1c1',
+          bgColor: 'black',
+          button: {
+            label: 'Undo',
+            handler (event) {
+              // self.saveItem(event)
+              // Specify what to do when button is clicked/tapped
+              // console.log('in handler, before call')
+              // console.log(self.user.length)
+              // api.saveItem(self)
+              // console.log('after call')
+              // console.log(self.user.length)
+            },
+            color: 'white'
+          }
+        })
+        )
     }
 
   }
