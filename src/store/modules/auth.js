@@ -60,7 +60,7 @@ const actions = {
         commit('setToken', response.data.access_token)
         commit('setAuthenticated', true)
         console.log('tokens refreshed, about to fetch user')
-        dispatch('fetchUser')
+        return dispatch('fetchUser')
       })
       .catch(error => {
         console.log('Failed to refresh tokens ' + error.message)
@@ -110,7 +110,7 @@ const actions = {
   },
   register ({dispatch}, creds) {
     return dispatch('createUser', creds).then(() => {
-      dispatch('fetchUser').then(router.push('favorites'))
+      dispatch('fetchUser').then(router.push('manage'))
     })
   },
   logout ({commit}) {
