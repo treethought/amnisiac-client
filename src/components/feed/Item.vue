@@ -24,7 +24,7 @@
 
 <script>
 // import auth from '../../auth/index.js'
-import api from '../../api/api.js'
+// import api from '../../api/api.js'
 import { Toast } from 'quasar'
 import {mapState} from 'vuex'
 export default {
@@ -70,8 +70,7 @@ export default {
     },
     saveItem (event) {
       console.log('Saving item to favorites')
-      api.saveItem(this)
-        .then(this.$store.dispatch('auth/fetchUser'))
+      this.$store.dispatch('user/saveItem', this.item)
         .then(Toast.create({
           html: 'Saved ' + this.item.raw_title + 'to favorites!',
           icon: 'star',
@@ -89,9 +88,7 @@ export default {
         )
     },
     removeItem (event) {
-      api.removeItem(this)
-      // var self = this
-        .then(this.$store.dispatch('auth/fetchUser'))
+      this.$store.dispatch('user/removeItem', this.item)
         .then(Toast.create({
           html: 'Removed ' + this.item.raw_title + 'from favorites!',
           icon: 'delete',
