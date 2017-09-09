@@ -25,7 +25,6 @@ import toggleSource from '../feed/toggleSources'
 import {mapState} from 'vuex'
 export default {
   name: 'dashboard',
-  // store: ['user', 'authenticated'],
   data () {
     return {
       items: [],
@@ -33,6 +32,11 @@ export default {
       alertError: false
     }
   },
+  // methods: {
+  //   ...mapActions('auth', [
+  //     'fetchUser'
+  //   ])
+  // },
   computed: {
     ...mapState({
       authenticated: state => state.auth.authenticated,
@@ -54,7 +58,7 @@ export default {
   },
   beforeCreate () {
     console.log('In before create!')
-    api.fetchUser(this)
+    this.$store.dispatch('auth/fetchUser')
   },
   created () {
     api.fetchItems(this.redditQuery, '', this)
