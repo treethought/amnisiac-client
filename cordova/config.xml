@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.treethought.amnisiac" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.treethought.amnisiac" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Amnisiac</name>
     <description>
         Stream music from reddit and soundcloud
     </description>
-    <author email="cpsweene@gmail.com" href="http://treehought.com">
+    <author email="me@treethought.com" href="http://treehought.com">
         Cam Sweeney
     </author>
     <content src="index.html" />
