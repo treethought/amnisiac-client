@@ -23,6 +23,7 @@ import Quasar, {
   QItemMain,
   QItemTile,
   QItemSide,
+  QItemSeparator,
   QListHeader,
   QBtn,
   QTabs,
@@ -42,7 +43,8 @@ import Quasar, {
   QAlert,
   QModal,
   QSlider,
-  QSpinnerBars
+  QSpinnerBars,
+  QFixedPosition
 }
   from 'quasar' // use this
 
@@ -58,6 +60,7 @@ Vue.use(Quasar, {
     QItemMain,
     QItemTile,
     QItemSide,
+    QItemSeparator,
     QListHeader,
     QBtn,
     QTabs,
@@ -77,7 +80,8 @@ Vue.use(Quasar, {
     QAlert,
     QModal,
     QSlider,
-    QSpinnerBars
+    QSpinnerBars,
+    QFixedPosition
   }
 }) // Install Quasar Framework
 Vue.use(VueYouTubeEmbed)
@@ -96,7 +100,6 @@ Quasar.start(() => {
   new Vue({
     el: '#q-app',
     router,
-    // store: require('./store2.js'),
     store,
     render: h => h(require('./App'))
   })
