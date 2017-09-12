@@ -44,7 +44,10 @@ import Quasar, {
   QModal,
   QSlider,
   QSpinnerBars,
-  QFixedPosition
+  QFixedPosition,
+  // QCollapsible,
+  QFab,
+  QFabAction
 }
   from 'quasar' // use this
 
@@ -81,7 +84,10 @@ Vue.use(Quasar, {
     QModal,
     QSlider,
     QSpinnerBars,
-    QFixedPosition
+    QFixedPosition,
+    // QCollapsible,
+    QFab,
+    QFabAction
   }
 }) // Install Quasar Framework
 Vue.use(VueYouTubeEmbed)
