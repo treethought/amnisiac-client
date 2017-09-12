@@ -11,10 +11,10 @@
     
     <p class="lead">Discover new music by subscribing to subreddits and soundcloud users</p>
     <p>Built with Flask, Vue.JS, and Quasar</p>
-    <p><router-link to='login'>Login</router-link>  -   <router-link to='register'>Register</router-link></p>
+    <p v-if='!user'><router-link to='login'>Login</router-link>  -   <router-link to='register'>Register</router-link></p>
+    <p v-else><router-link to='dashboard'>Dashboard</router-link>  -   <router-link to='favorites'>Favorites</router-link></p>
 
-
-    <feed-index></feed-index>
+    <listen></listen>
 
   </q-card-main>
 </q-card>
@@ -27,22 +27,17 @@
   export default {
     name: 'home',
     components: {
-      'feed-index': Listen
+      Listen
+    },
+    computed: {
+      user () {
+        return this.$store.state.auth.user
+      }
     }
+
   }
 </script>
 
 <style>
-.jumbotron {
-  background-color: white !important;
-}
-h1 {
-  color: purple;
-  font-family: 'Comfortaa', cursive;
-    /*font-size: 60px;*/
 
-}
-h1 > span {
-  color: black;
-}
 </style>
