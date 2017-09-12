@@ -18,7 +18,7 @@
 
 
     <q-toolbar-title v-else class='text-center justify-center no-margin multiline'>
-        <div class="col-6">
+        <div class="">
         {{currentItem.raw_title}}
         </div>
         <span slot="subtitle" class='text-white'>

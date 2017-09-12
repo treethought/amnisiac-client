@@ -5,6 +5,18 @@
  <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' :min='0' :max='currentDuration'></q-slider>
 </div>
 
+  <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1">
+
+
+    <q-toolbar-title class='text-center'>
+        {{currentItem.raw_title}}
+        <span slot="subtitle" class='text-white'>
+      {{currentItem.subreddit}}
+    </span>
+    </q-toolbar-title>
+
+  </q-toolbar>
+
 
 
 <q-toolbar class=''>
@@ -59,7 +71,7 @@
 
 
 <q-fab flat 
-  class='fixed-bottom-right desktop-hide'
+  class='fixed-bottom-right z-absolute desktop-hide'
   style="right: 15px; bottom: 10px"
   color="tertiary"
   icon="dehaze"
@@ -71,12 +83,12 @@
     @click="saveOrRemove"
   />
   <q-fab-action
-    color="secondary"
+    color="white"
     @click="openReddit"
     icon="fa-reddit"
   />
   <q-fab-action
-    color="secondary"
+    color="white"
     @click="showPlayer"
     icon="live_tv"
   />

@@ -1,7 +1,7 @@
 <template>
-<div>
-<q-card>
-<q-item dense :item='item'  v-bind:class="{'bg-primary': isActive, 'text-black': isActive}">
+
+<q-card inline class='no-margin full-width'>
+<q-item :item='item'  v-bind:class="{'bg-primary': isActive, 'text-black': isActive}">
   <q-item-side v-if='!isPlaying' icon='play_arrow' highlight @click='clickItem' />
   <q-item-side v-else icon='pause' highlight @click='clickItem' />
   <q-item-main>
@@ -18,7 +18,7 @@
 </q-item>
 </q-card>
 
-</div>
+
  
 </template>
 
@@ -112,6 +112,7 @@ export default {
 </script>
 
 <style scoped>
+
 td > img {
     width: 40px;
     width: 40px;

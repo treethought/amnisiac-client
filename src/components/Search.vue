@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-  <q-card color='dark'>
+  <q-card  color='dark'>
     <q-card-title>
       Select Sources
     </q-card-title>
@@ -24,7 +24,7 @@
     </multiselect>
 
      <q-card-actions>
-      <q-btn @click="submitSearch">
+      <q-btn color='primary' @click="submitSearch">
         Submit
       </q-btn>
     </q-card-actions>
