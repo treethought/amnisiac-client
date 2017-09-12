@@ -5,9 +5,7 @@
     <feed-list :items='items'></feed-list>
   </div>
 
-  <!-- <div v-else class='relative-position'> -->
     <q-inner-loading :visible="isLoading" />
-  <!-- </div> -->
 
   <div v-if='alertError'>
     <p>Sorry, an error occured when contacting the server</p>
@@ -61,7 +59,7 @@ export default {
     this.$store.dispatch('auth/fetchUser')
   },
   created () {
-    api.fetchItems(this.redditQuery, '', this)
+    this.$store.dispatch('auth/fetchUser').then(api.fetchItems(this.redditQuery, '', this))
   },
   route: {
     // Check the users auth status befre allowing access
