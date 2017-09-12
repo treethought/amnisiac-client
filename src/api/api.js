@@ -69,35 +69,25 @@ export default {
     console.log('Saving item to favorites')
     return http.post('users/favorites', {item: context.item})
       .then(response => {
-        console.log(response.status)
-        context.$store.user = response.data // response has updated User object
         console.log('Successfully saved item')
       }).catch(error => {
-        console.log('error saving favorite')
-        console.log(error)
-      // throw error
+        console.log('error saving favorite ' + error.message)
       })
   },
   removeItem (context) {
     console.log('Removing item to favorites')
     return http.put('users/favorites', {item: context.item})
       .then(response => {
-        console.log(response.status)
-        context.$store.user = response.data
         console.log('Successfully removed item')
       }).catch(error => {
-        // error callback
-        console.log('error removing favorite')
-        console.log(error)
-        console.log(error.data)
-      // throw error
+        console.log('error removing favorite ' + error.message)
       })
   },
   fetchUser (context, redirect) {
     console.log('fetching user...')
     return http.get('users')
       .then(response => {
-        context.$store.user = response.data
+        // context.$store.user = response.data
         console.log('User data obtained')
       }).catch(error => {
         console.log(error.response.status)
