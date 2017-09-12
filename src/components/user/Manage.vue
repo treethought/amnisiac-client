@@ -1,8 +1,8 @@
 <template>
-  <div class='container'>
+  <div class='text-center'>
 
   <div>
-  <q-card v-for="source in sources" inline style="width: 300px" :key='source'>
+  <q-card color='secondary' class='text-white' v-for="source in sources" inline style="width: 300px" :key='source'>
   <q-card-title>
     {{source.name}}
     <div slot="right" class="row items-center">
@@ -21,7 +21,7 @@
 
 <div>
 
-<q-card inline style="width: 500px">
+<q-card inline color='secondary' style="width: 500px">
   <q-card-title>Add Subreddits</q-card-title>
   <q-card-main>
     <form id="form" v-on:submit.prevent="addSources">
@@ -35,7 +35,7 @@
   </q-card-main>
   </q-card>
 
-  <q-card inline style="width: 500px">
+  <q-card color='secondary' inline style="width: 500px">
     <q-card-title>Add Soundcloud Artists</q-card-title>
     <q-card-main>
       <form id="form" v-on:submit.prevent="addSources">
@@ -49,7 +49,7 @@
   </q-card-main>
 </q-card>
 <br>
-<q-btn @click.native="addSources">Subscribe</q-btn> 
+<q-btn color='white' @click.native="addSources">Subscribe</q-btn> 
 
 
 </div>
