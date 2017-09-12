@@ -18,6 +18,7 @@ module.exports = {
   ],
   globals: {
     'cordova': true,
+    'MusicControls': true,
     'DEV': true,
     'PROD': true,
     '__THEME': true

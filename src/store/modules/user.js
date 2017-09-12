@@ -1,8 +1,38 @@
-
+import {http} from '../../api/common.js'
 // const state = {
 //   user
 // }
 
+const actions = {
+  saveItem ({dispatch}, item) {
+    console.log('Saving item to favorites')
+    return http.post('users/favorites', {item: item})
+      .then(response => {
+        console.log('Successfully saved item')
+        return dispatch('auth/fetchUser', null, { root: true })
+      }).catch(error => {
+        console.log('error saving favorite ' + error.message)
+      })
+  },
+  removeItem ({dispatch}, item) {
+    console.log('Removing item to favorites')
+    return http.put('users/favorites', {item: item})
+      .then(response => {
+        console.log('Successfully removed item')
+        return dispatch('auth/fetchUser', null, { root: true })
+      }).catch(error => {
+        console.log('error removing favorite ' + error.message)
+      })
+  }
+}
+
+export default {
+  namespaced: true,
+  // state,
+  // getters,
+  // mutations,
+  actions
+}
 // const actions = {
 //   addSources ({commit}, {reddit, sc}) {
 //     console.log('Adding sources ' + reddit + sc)

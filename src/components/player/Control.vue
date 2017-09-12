@@ -1,19 +1,25 @@
 <template>
 
-  <q-toolbar class="justify-center" :padding="1">
+<div>
 
-  <q-toolbar-title class='text-center col-6'>
-
-    <!-- <q-inner-loading dark :visible='!currentDuration'>
-          <q-spinner-bars size="30px" color="primary" />
-      </q-inner-loading> -->
-
-    {{currentItem.raw_title}}<br>
+  <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1">
 
 
-      <div class="group text-center relative-position">
+    <q-toolbar-title class='text-center'>
+        {{currentItem.raw_title}}
+        <span slot="subtitle" class='text-white'>
+      {{currentItem.subreddit}}
+    </span>
+    </q-toolbar-title>
+
+  </q-toolbar>
+
+
+
+  <q-toolbar class="justify-center fit">
+  <q-toolbar-title class='text-center'>
+  <div class="group relative-position">
       
-  
         <q-btn flat  v-on:click.stop="selectPrevious">
           <q-icon name="skip_previous" color='primary' />
         </q-btn>  
@@ -30,54 +36,74 @@
           <q-icon name="skip_next" color='primary' />
         </q-btn><br>
       </div>
+  </q-toolbar-title>
+  </q-toolbar>
 
+   <q-toolbar class="justify-center" :padding="1">
+
+
+  <q-toolbar-title class='text-center col-6'>
       <div>
         <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' :min='0' :max='currentDuration'></q-slider>
       </div>
 
-      <div class='relative-position'>
-
-       <!--  <q-inner-loading dark :visible='!currentDuration'>
-          <q-spinner-bars size="30px" color="primary" />
-        </q-inner-loading> -->
-
-        <!-- <div v-if="currentDuration"> -->
+      <div>
           {{cleanCurrentTime}} / {{cleanDuration}}
-        <!-- </div> -->
       </div>
-     
-
-    </q-toolbar-title>
 
 
-  <q-btn
+<q-btn v-if='playerVisible'
+        v-back-to-top round
+        small
+        color="primary"
+        icon="keyboard_arrow_up"
+        class="fixed-bottom-right"
+      style="right: 18px; bottom: 18px" />
+   <!--    
+    <q-btn round flat v-if='playerVisible'
+      v-back-to-top
+      color="primary"
+
+      class="fixed-bottom-right"
+      style="right: 18px; bottom: 18px">
+
+      <q-icon  name="keyboard_arrow_up" />
+    <!-- <img v-else :src="thumbnailSrc" height='auto' width='70' block> -->
+    <!-- <player height='60' width='60'></player> -->
+  <!-- </q-btn>  -->
+
+  <q-btn v-else flat
+    v-back-to-top.animate="0"
     color="tertiary"
     @click='togglePlayer()'
     class="fixed-bottom-right"
-    style="right: 18px; bottom: 18px">
+    style="right: 5px; bottom: 5px">
+    <img :src="thumbnailSrc" height='auto' width='70' block>
+    </q-btn>
 
-    <q-icon v-if='playerVisible' name="close" color='primary' />
-    <img v-else :src="thumbnailSrc" height='auto' width='70' block>
-    <!-- <player height='60' width='60'></player> -->
-  </q-btn> 
-
-
- </q-toolbar>
  
+     
+ </q-toolbar-title>
+ </q-toolbar>
+
+
+
+ </div>
 
 
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
-import Player from './Player'
-// import BackToTop from 'quasar'
+import {mapState, mapActions, mapMutations} from 'vuex'
+// import Player from './Player'
+import {BackToTop} from 'quasar'
 export default {
   name: 'control',
-  components: { Player },
-  // directives: { BackToTop },
+  // components: { Player },
+  directives: { BackToTop },
   computed: {
     ...mapState({
+      user: state => state.auth.user,
       currentlyPlaying: state => state.player.currentlyPlaying,
       buffering: state => state.player.buffering,
       currentItem: state => state.player.currentItem,
@@ -92,24 +118,30 @@ export default {
       return this.cleanTime(this.currentDuration)
     },
     thumbnailSrc () {
-      return 'http://img.youtube.com/vi/' + this.currentItem.track_id + '/0.jpg'
+      return 'https://img.youtube.com/vi/' + this.currentItem.track_id + '/0.jpg'
+    },
+    inFavorites: function () {
+      return this.user.favorites.some((fav) => {
+        return fav.track_id === this.currentItem.track_id
+      })
     }
   },
   methods: {
     ...mapActions('player', [
       'seekTime',
       'selectNext',
-      'selectPrevious'
+      'selectPrevious',
+      'saveItem',
+      'removeItem'
+    ]),
+    ...mapMutations('player', [
+      'togglePlayer'
     ]),
     pause () {
       this.$root.$emit('pause')
     },
     resume () {
       this.$root.$emit('resume')
-    },
-    togglePlayer () {
-      let status = !this.playerVisible
-      this.$store.commit('player/setPlayerVisible', status)
     },
     cleanTime (t) {
       // https://stackoverflow.com/questions/5539028/converting-seconds-into-hhmmss
@@ -118,6 +150,88 @@ export default {
       var m = Math.floor(t % 3600 / 60)
       var s = Math.floor(t % 3600 % 60)
       return ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2)
+    },
+    onSuccess () {
+      console.log('MusicControls created successfully')
+    },
+    onError (err) {
+      console.log('Failed to create musicCronrols')
+      console.log(err)
+    },
+    updateNotification () {
+      console.log('Creating Music Controls')
+      if (this.$q.platform.is.cordova) {
+        MusicControls.create({
+          track: this.currentItem.raw_title, // optional, default : ''
+          // artist: 'Muse', // optional, default : ''
+          cover: this.thumbnailSrc, // optional, default : nothing
+          isPlaying: this.currentlyPlaying, // optional, default : true
+          ticker: 'Now playing "Time is Running Out"'
+        }, this.onSuccess, this.onError)
+
+        // Register callback
+        MusicControls.subscribe(this.notifyEvents)
+        MusicControls.listen()
+      }
+    },
+    notifyEvents (action) {
+      const message = JSON.parse(action).message
+      switch (message) {
+        case 'music-controls-next':
+          this.selectNext() // changes currentItem to trigger update
+          this.updateNotification()
+          break
+        case 'music-controls-previous':
+          this.selectPrevious() // changes currentItem to trigger update
+          this.updateNotification()
+          break
+        case 'music-controls-pause':
+          this.pause()
+          this.updateNotification()
+          break
+        case 'music-controls-play':
+          this.resume()
+          this.updateNotification()
+          break
+        case 'music-controls-destroy':
+          // todo
+          break
+
+        // External controls (iOS only)
+        case 'music-controls-toggle-play-pause' :
+          // Do something
+          break
+        case 'music-controls-seek-to':
+          const seekToInSeconds = JSON.parse(action).position
+          MusicControls.updateElapsed({
+            elapsed: seekToInSeconds,
+            isPlaying: true
+          })
+          self.seekTime(seekToInSeconds)
+          // Do something
+          break
+
+        // Headset events (Android only)
+        // All media button events are listed below
+        case 'music-controls-media-button' :
+          // Do something
+          console.log('Media button pressed')
+          break
+        case 'music-controls-headset-unplugged':
+          // Do something
+          break
+        case 'music-controls-headset-plugged':
+          // Do something
+          break
+        default:
+          break
+      }
+    }
+  },
+  watch: {
+    currentlyPlaying () {
+      // console.log('new item')
+      this.updateNotification()
     }
   }
 }

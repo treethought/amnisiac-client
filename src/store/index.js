@@ -2,6 +2,7 @@ import Vue from 'vue' // used for Vue.set if state holds any objects
 import Vuex from 'vuex'
 import auth from './modules/auth'
 import player from './modules/player'
+import user from './modules/user'
 
 Vue.use(Vuex)
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
   strict: debug,
   modules: {
     auth,
-    player
+    player,
+    user
   }
 })

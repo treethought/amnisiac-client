@@ -40,6 +40,10 @@ const mutations = {
   setPlayerVisible (state, status) {
     state.playerVisible = status
   },
+  togglePlayer (state) {
+    let newStatus = !state.playerVisible
+    state.playerVisible = newStatus
+  },
   setPlaying (state, player) {
     console.log('setting playing')
     state.currentDuration = parseInt(player.getDuration()) // metadata loaded after video beings playing

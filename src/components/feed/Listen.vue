@@ -29,7 +29,7 @@ import api from '../../api/api.js'
 import toggleSource from './toggleSources'
 
 export default {
-  name: 'feed-index',
+  name: 'listen',
   components: {
     Player,
     feedList,

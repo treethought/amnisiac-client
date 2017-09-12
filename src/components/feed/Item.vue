@@ -23,14 +23,11 @@
 </template>
 
 <script>
-// import auth from '../../auth/index.js'
-import api from '../../api/api.js'
 import { Toast } from 'quasar'
 import {mapState} from 'vuex'
 export default {
   name: 'item',
   props: ['item', 'idx'],
-  // store: ['user', 'currentlyPlaying'],
   data () {
     return {
       payload: { item: this.item, idx: this.idx }
@@ -70,46 +67,44 @@ export default {
     },
     saveItem (event) {
       console.log('Saving item to favorites')
-      api.saveItem(this) // should update user
-      this.$root.$emit('update-user') // todo\
-      Toast.create({
-        html: 'Saved ' + this.item.raw_title + 'to favorites!',
-        icon: 'star',
-        timeout: 2500,
-        color: '#f8c1c1',
-        bgColor: 'black'
-        // button: {
-        //   label: 'Undo',
-        //   handler () {
-        //     // Specify what to do when button is clicked/tapped
-        //   },
-        //   color: 'white'
-        // }
-      })
+      let self = this
+      this.$store.dispatch('user/saveItem', this.item)
+        .then(Toast.create({
+          html: 'Saved ' + this.item.raw_title + 'to favorites!',
+          icon: 'favorites',
+          timeout: 2500,
+          color: '#f8c1c1',
+          bgColor: 'black',
+          button: {
+            label: 'Undo',
+            handler () {
+              console.log('Undo save')
+              self.$store.dispatch('user/removeItem', self.item)
+            },
+            color: 'white'
+          }
+        })
+        )
     },
     removeItem (event) {
-      api.removeItem(this)
-      // var self = this
-      Toast.create({
-        html: 'Removed ' + this.item.raw_title + 'from favorites!',
-        icon: 'delete',
-        timeout: 2500,
-        color: '#f8c1c1',
-        bgColor: 'black',
-        button: {
-          label: 'Undo',
-          handler (event) {
-            // self.saveItem(event)
-            // Specify what to do when button is clicked/tapped
-            // console.log('in handler, before call')
-            // console.log(self.user.length)
-            // api.saveItem(self)
-            // console.log('after call')
-            // console.log(self.user.length)
-          },
-          color: 'white'
-        }
-      })
+      let self = this
+      this.$store.dispatch('user/removeItem', this.item)
+        .then(Toast.create({
+          html: 'Removed ' + this.item.raw_title + 'from favorites!',
+          icon: 'delete',
+          timeout: 3000,
+          color: '#f8c1c1',
+          bgColor: 'black',
+          button: {
+            label: 'Undo',
+            handler () {
+              console.log('Undo remove')
+              self.$store.dispatch('user/saveItem', self.item)
+            },
+            color: 'white'
+          }
+        })
+        )
     }
 
   }

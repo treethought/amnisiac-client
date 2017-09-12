@@ -11,7 +11,7 @@ export default {
 
   login (context, creds) {
     console.log('requesting jwt')
-    return http.post('auth', creds)
+    return http.post('auth/login', creds)
       .then(response => {
         console.log(response)
         LocalStorage.set('access_token', response.data.access_token)
@@ -27,7 +27,7 @@ export default {
   },
   register (context, creds) {
     console.log('Registering user')
-    return http.post('register', creds)
+    return http.post('auth/register', creds)
       .then(response => {
         console.log(response)
         LocalStorage.set('access_token', response.data.access_token)
@@ -43,7 +43,7 @@ export default {
   },
   refresh (retry, redirect) {
     console.log('reshreshing token')
-    http.post('refresh', {
+    http.post('auth/refresh', {
       headers: {
         Authorization: 'Bearer ' + LocalStorage.get.item('refresh_token')
       }})

@@ -5,9 +5,7 @@
     <feed-list :items='items'></feed-list>
   </div>
 
-  <!-- <div v-else class='relative-position'> -->
     <q-inner-loading :visible="isLoading" />
-  <!-- </div> -->
 
   <div v-if='alertError'>
     <p>Sorry, an error occured when contacting the server</p>
@@ -25,7 +23,6 @@ import toggleSource from '../feed/toggleSources'
 import {mapState} from 'vuex'
 export default {
   name: 'dashboard',
-  // store: ['user', 'authenticated'],
   data () {
     return {
       items: [],
@@ -33,6 +30,11 @@ export default {
       alertError: false
     }
   },
+  // methods: {
+  //   ...mapActions('auth', [
+  //     'fetchUser'
+  //   ])
+  // },
   computed: {
     ...mapState({
       authenticated: state => state.auth.authenticated,
@@ -54,10 +56,10 @@ export default {
   },
   beforeCreate () {
     console.log('In before create!')
-    api.fetchUser(this)
+    this.$store.dispatch('auth/fetchUser')
   },
   created () {
-    api.fetchItems(this.redditQuery, '', this)
+    this.$store.dispatch('auth/fetchUser').then(api.fetchItems(this.redditQuery, '', this))
   },
   route: {
     // Check the users auth status befre allowing access
