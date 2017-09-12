@@ -1,8 +1,9 @@
 <template>
 
-  <q-card v-show='playerVisible' class='bg-black text-center'>
-    <q-card-media overlay-position="top">
-
+  <q-card class='bg-black text-center' v-show='playerVisible' v-bind:class="{'fixed-top': underLayVideo}"> 
+      <q-card-actions align='end'><q-btn flat disable /></q-card-actions>
+       
+    <q-card-media overlay-position='top'>
         <youtube v-model='player' :video-id.sync="currentItem.track_id"
                  @ready="onPlayerReady"
                  @qued='onPlayerReady'
@@ -18,8 +19,14 @@
   </q-card-media>
 
   <q-card-actions align='end'>
-    <q-btn round small color="primary" @click="togglePlayer" icon="close" />
+    <q-btn small round
+
+    color="primary"
+    @click="togglePlayer"
+    icon="close" />
   </q-card-actions>
+
+
   </q-card>
 
 
@@ -35,7 +42,8 @@ export default {
     return {
       player: null,
       time: 0,
-      tracker: 0
+      tracker: 0,
+      underLayVideo: false
     }
   },
   created () {
