@@ -1,12 +1,11 @@
 <template>
 
-  <q-card v-show='playerVisible' class='bg-secondary text-center'>
-  <q-card-title slot='overlay' class='text-primary'>{{currentItem.raw_title}}</q-card-title>
+  <q-card v-show='playerVisible' class='bg-black text-center'>
     <q-card-media overlay-position="top">
 
         <youtube v-model='player' :video-id.sync="currentItem.track_id"
-                 @ready="playerReady"
-                 @qued='playerReady'
+                 @ready="onPlayerReady"
+                 @qued='onPlayerReady'
                  @playing="setPlaying"
                  @paused='setPaused'
 
@@ -17,7 +16,13 @@
                  player-width='100%'
         ></youtube>
   </q-card-media>
+
+  <q-card-actions align='end'>
+    <q-btn round small color="primary" @click="togglePlayer" icon="close" />
+  </q-card-actions>
   </q-card>
+
+
 
 </template>
 
@@ -51,7 +56,7 @@ export default {
       console.log('Detected new target time')
       this.seek(newTime)
     },
-    currentItem () {
+    currentItem () { // new item selected/played
       this.setDuration(parseInt(this.player.getDuration()))
     }
   },
@@ -69,14 +74,15 @@ export default {
       'setPlaying', // map `this.increment()` to `this.$store.dispatch('increment')`
       'setPaused',
       'setBuffering', // maybe set as callback for @buffering from player
-      'setDuration'
+      'setDuration',
+      'togglePlayer'
     ]),
     // actions to sync time
     ...mapActions('player', [
       'selectNext',
       'setTime'
     ]),
-    playerReady (player) {
+    onPlayerReady (player) {
       console.log('player ready')
       this.player = player
       this.player.playVideo()
