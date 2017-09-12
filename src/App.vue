@@ -12,7 +12,7 @@
 import layout from './components/layout'
 // import api from './api/api.js'
 // import auth from './api/auth.js'
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 export default {
   name: 'app',
   components: {
@@ -23,6 +23,19 @@ export default {
       authenticated: state => state.auth.authenticated,
       user: state => state.auth.user
     })
+  },
+  methods: {
+    ...mapActions('auth', [
+      'authorize',
+      'fetchUser'
+    ])
+  },
+  created () {
+    console.log('in created, checking auth status')
+    if (this.authenticated) {
+      console.log('fetching user')
+      this.fetchUser()
+    }
   }
 }
 </script>
