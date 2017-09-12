@@ -2,7 +2,8 @@
 
 <div>
 
-  <q-toolbar class="justify-center no-margin" :padding="1">
+  <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1">
+
 
     <q-toolbar-title class='text-center'>
         {{currentItem.raw_title}}
@@ -39,6 +40,8 @@
   </q-toolbar>
 
    <q-toolbar class="justify-center" :padding="1">
+
+
   <q-toolbar-title class='text-center col-6'>
       <div>
         <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' :min='0' :max='currentDuration'></q-slider>
@@ -69,12 +72,12 @@
     <!-- <player height='60' width='60'></player> -->
   <!-- </q-btn>  -->
 
-  <q-btn v-else
+  <q-btn v-else flat
     v-back-to-top.animate="0"
     color="tertiary"
     @click='togglePlayer()'
     class="fixed-bottom-right"
-    style="right: 18px; bottom: 18px">
+    style="right: 5px; bottom: 5px">
     <img :src="thumbnailSrc" height='auto' width='70' block>
     </q-btn>
 
@@ -100,6 +103,7 @@ export default {
   directives: { BackToTop },
   computed: {
     ...mapState({
+      user: state => state.auth.user,
       currentlyPlaying: state => state.player.currentlyPlaying,
       buffering: state => state.player.buffering,
       currentItem: state => state.player.currentItem,
@@ -115,13 +119,20 @@ export default {
     },
     thumbnailSrc () {
       return 'https://img.youtube.com/vi/' + this.currentItem.track_id + '/0.jpg'
+    },
+    inFavorites: function () {
+      return this.user.favorites.some((fav) => {
+        return fav.track_id === this.currentItem.track_id
+      })
     }
   },
   methods: {
     ...mapActions('player', [
       'seekTime',
       'selectNext',
-      'selectPrevious'
+      'selectPrevious',
+      'saveItem',
+      'removeItem'
     ]),
     ...mapMutations('player', [
       'togglePlayer'

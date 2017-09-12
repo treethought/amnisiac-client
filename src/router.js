@@ -24,7 +24,7 @@ export default new VueRouter({
   routes: [
     // { path: '/', component: load('layout') }, // Default,
     { path: '/',
-      component: load('layout'),
+      component: load('layouts/Main'),
       children: [
         {
           // UserProfile will be rendered inside User's <router-view>
