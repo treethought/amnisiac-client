@@ -6,7 +6,7 @@
     <q-card-title>
     <toggle-source  :sources='sources'></toggle-source>
     </q-card-title>
-     <q-list class='bg-tertiary text-secondary'>
+     <q-list class='bg-tertiary text-white'>
         <!-- <q-list-header>Feed</q-list-header> -->
         <item v-for='(item, idx) in filteredItems'
                 :item='item'

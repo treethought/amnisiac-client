@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-  <q-card>
+  <q-card color='dark'>
     <q-card-title>
       Select Sources
     </q-card-title>

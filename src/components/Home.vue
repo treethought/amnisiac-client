@@ -2,11 +2,11 @@
 
 <!-- <div class='bg-white'> -->
 
-<q-card class='text-center bg-tertiary'>
+<q-card  color='secondary' flat class='text-center'>
   <q-card-title >
    <h1 class="display-2 text-primary">amnis<span>!ac</span></h1>
   </q-card-title>
-  <q-card-main class='text-secondary'>
+  <q-card-main class='text-white'>
     <img src="../assets/icons/mtn-stream.png"><br>
     
     <p class="lead">Discover new music by subscribing to subreddits and soundcloud users</p>
@@ -39,5 +39,4 @@
 </script>
 
 <style>
-
 </style>
