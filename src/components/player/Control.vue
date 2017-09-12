@@ -1,90 +1,90 @@
 <template>
 
 <div>
-
-  <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1">
-
-
-    <q-toolbar-title class='text-center'>
-        {{currentItem.raw_title}}
-        <span slot="subtitle" class='text-white'>
-      {{currentItem.subreddit}}
-    </span>
-    </q-toolbar-title>
-
-  </q-toolbar>
+<div class='bg-tertiary'>
+ <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' :min='0' :max='currentDuration'></q-slider>
+</div>
 
 
 
-  <q-toolbar class="justify-center fit">
-  <q-toolbar-title class='text-center'>
-  <div class="group relative-position">
-      
-        <q-btn flat  v-on:click.stop="selectPrevious">
-          <q-icon name="skip_previous" color='primary' />
-        </q-btn>  
+<q-toolbar class=''>
 
-        <q-btn v-if='currentlyPlaying' flat  v-on:click="pause">
-          <q-icon name="pause" color='primary' />
-        </q-btn> 
+<q-btn flat class='col-xs-2 col-md-1' @click='toTop'>
+    <img class='' :srcset="thumbnailSrc" height='auto' width='70' block>
+</q-btn>
 
-        <q-btn v-else flat  v-on:click="resume">
-          <q-icon name="play_arrow" color='primary' />
-        </q-btn> 
+<div class='col-xs-0 col-md-3'></div>
 
-        <q-btn flat v-on:click.stop="selectNext">
-          <q-icon name="skip_next" color='primary' />
-        </q-btn><br>
+
+<q-toolbar-title class='text-center fit col-xs-8 col-md-4'>
+  <div class="group">
+    <q-btn flat  v-on:click.stop="selectPrevious">
+      <q-icon name="skip_previous" color='primary' />
+    </q-btn>  
+
+    <q-btn v-if='currentlyPlaying' flat  v-on:click="pause">
+      <q-icon name="pause" color='primary' />
+    </q-btn> 
+
+    <q-btn v-else flat  v-on:click="resume">
+      <q-icon name="play_arrow" color='primary' />
+    </q-btn> 
+
+    <q-btn flat v-on:click.stop="selectNext">
+      <q-icon name="skip_next" color='primary' />
+    </q-btn><br>
+  </div>
+
+     <div slot='subtitle'>
+          {{cleanCurrentTime}} / {{cleanDuration}}<br>
       </div>
-  </q-toolbar-title>
-  </q-toolbar>
+</q-toolbar-title>
 
-   <q-toolbar class="justify-center" :padding="1">
+<q-toolbar-title class='text-center col-xs-auto col-md-3 offset-md-1 justify-end'>
+<div class="group mobile-hide cordova-hide">
+    <q-btn flat  @click.stop="saveOrRemove" class=''>
+      <q-icon name="favorites" v-bind:class="{'text-primary': inFavorites}" />
+    </q-btn>  
 
-
-  <q-toolbar-title class='text-center col-6'>
-      <div>
-        <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' :min='0' :max='currentDuration'></q-slider>
-      </div>
-
-      <div>
-          {{cleanCurrentTime}} / {{cleanDuration}}
-      </div>
-
-
-<q-btn v-if='playerVisible'
-        v-back-to-top round
-        small
-        color="primary"
-        icon="keyboard_arrow_up"
-        class="fixed-bottom-right"
-      style="right: 18px; bottom: 18px" />
-   <!--    
-    <q-btn round flat v-if='playerVisible'
-      v-back-to-top
-      color="primary"
-
-      class="fixed-bottom-right"
-      style="right: 18px; bottom: 18px">
-
-      <q-icon  name="keyboard_arrow_up" />
-    <!-- <img v-else :src="thumbnailSrc" height='auto' width='70' block> -->
-    <!-- <player height='60' width='60'></player> -->
-  <!-- </q-btn>  -->
-
-  <q-btn v-else flat
-    v-back-to-top.animate="0"
-    color="tertiary"
-    @click='togglePlayer()'
-    class="fixed-bottom-right"
-    style="right: 5px; bottom: 5px">
-    <img :src="thumbnailSrc" height='auto' width='70' block>
+    <q-btn flat  @click="openReddit" class=''>
+      <q-icon name="fa-reddit" color='black' />
     </q-btn>
 
- 
-     
- </q-toolbar-title>
- </q-toolbar>
+    <q-btn flat @click.stop="showPlayer" class=''>
+      <q-icon name="live_tv" v-bind:class="{'text-primary': playerVisible}"/>
+    </q-btn>
+</div>
+</q-toolbar-title>
+
+
+
+<q-fab flat 
+  class='fixed-bottom-right desktop-hide'
+  style="right: 15px; bottom: 10px"
+  color="tertiary"
+  icon="dehaze"
+  direction="up"
+>
+  <q-fab-action
+    icon='favorite'
+    color="primary"
+    @click="saveOrRemove"
+  />
+  <q-fab-action
+    color="secondary"
+    @click="openReddit"
+    icon="fa-reddit"
+  />
+  <q-fab-action
+    color="secondary"
+    @click="showPlayer"
+    icon="live_tv"
+  />
+</q-fab>
+
+
+</q-toolbar>
+
 
 
 
@@ -95,11 +95,13 @@
 
 <script>
 import {mapState, mapActions, mapMutations} from 'vuex'
-// import Player from './Player'
-import {BackToTop} from 'quasar'
+import MiniPlayer from './MiniPlayer'
+import Player from './Player'
+import {BackToTop, openURL} from 'quasar'
 export default {
   name: 'control',
-  // components: { Player },
+  inject: ['layout'],
+  components: { MiniPlayer, Player },
   directives: { BackToTop },
   computed: {
     ...mapState({
@@ -120,6 +122,10 @@ export default {
     thumbnailSrc () {
       return 'https://img.youtube.com/vi/' + this.currentItem.track_id + '/0.jpg'
     },
+    sourceUrl () {
+      let base = 'https://reddit.com/'
+      return base + this.currentItem.subreddit
+    },
     inFavorites: function () {
       return this.user.favorites.some((fav) => {
         return fav.track_id === this.currentItem.track_id
@@ -130,13 +136,37 @@ export default {
     ...mapActions('player', [
       'seekTime',
       'selectNext',
-      'selectPrevious',
+      'selectPrevious'
+    ]),
+    ...mapActions('user', [
       'saveItem',
       'removeItem'
     ]),
     ...mapMutations('player', [
-      'togglePlayer'
+      'togglePlayer',
+      'toggleMiniPlayer'
     ]),
+    showPlayer () {
+      if (!this.playerVisible) {
+        this.togglePlayer()
+      }
+      this.toTop()
+    },
+    toTop () {
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+    },
+    openReddit () {
+      openURL(this.sourceUrl)
+    },
+    saveOrRemove () {
+      if (this.inFavorites) {
+        this.removeItem(this.currentItem)
+      }
+      else {
+        this.saveItem(this.currentItem)
+      }
+    },
     pause () {
       this.$root.$emit('pause')
     },
