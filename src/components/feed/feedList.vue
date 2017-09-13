@@ -1,25 +1,38 @@
 <template>
 
-<div>
+
 
   <q-card flat v-if='items' class='bg-tertiary'>
+  <!-- <q-window-resize-observable @resize="onResize" /> -->
     <q-card-title>
     <toggle-source  :sources='sources'></toggle-source>
     </q-card-title>
+
      <q-list class='bg-tertiary text-white'>
-        <!-- <q-list-header>Feed</q-list-header> -->
+
+<q-scroll-area class=''
+  :style="{height: feedHeight}"
+  :thumb-style="{
+    right: '4px',
+    borderRadius: '5px',
+    background: 'pink',
+    width: '10px',
+    opacity: 1
+  }"
+  :delay="1500"
+>
         <item v-for='(item, idx) in filteredItems'
                 :item='item'
                 :idx=idx
                 :key='item.key'>
         </item>
-
+        </q-scroll-area>
       </q-list>
 
   </q-card>
 
 
-</div>
+
 </template>
 
 <script>
@@ -37,11 +50,18 @@
       this.$store.commit('player/setPlaylist', this.filteredItems)
     },
     data () {
-      return {}
+      return {
+        feedHeight: window.innerHeight + 'px'
+      }
     },
     watch: {
       filteredItems (newPlaylist) {
         this.$store.commit('player/setPlaylist', newPlaylist)
+      }
+    },
+    methods: {
+      onResize (size) {
+        this.feedHeight = size.height
       }
     },
     computed: {
