@@ -1,11 +1,11 @@
 <template>
 
 <div>
-<div class='bg-tertiary'>
+<div class='bg-secondary'>
  <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' :min='0' :max='currentDuration'></q-slider>
 </div>
 
-  <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1">
+<!--   <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1">
 
 
     <q-toolbar-title class='text-center'>
@@ -15,17 +15,34 @@
     </span>
     </q-toolbar-title>
 
-  </q-toolbar>
+  </q-toolbar> -->
 
 
 
-<q-toolbar class=''>
+<q-toolbar class='row items-start'>
 
-<q-btn flat class='col-xs-2 col-md-1' @click='toTop'>
-    <img class='' :srcset="thumbnailSrc" height='auto' width='70' block>
-</q-btn>
 
-<div class='col-xs-0 col-md-3'></div>
+  <q-card-media inline class='col-xs-2 col-md-1 no-margin no-gutter' @click='toTop'>
+    <img class='responsive' :srcset="thumbnailSrc">
+  </q-card-media>
+
+
+    <!-- <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1"> -->
+
+
+    <q-card flat class='text-center col-xs-0 col-md-3 mobile-hide cordova-hide'>  <!-- New title info replacing old empty space -->
+        {{currentItem.raw_title}}<br>
+        <span slot="subtitle" class='text-white'>
+      {{currentItem.subreddit}}
+    </span>
+    </q-card flat>
+
+  <!-- </q-toolbar> -->
+
+
+
+
+<!-- <div class='col-xs-0 col-md-3'></div> -->
 
 
 <q-toolbar-title class='text-center fit col-xs-8 col-md-4'>
@@ -55,7 +72,7 @@
 <q-toolbar-title class='text-center col-xs-auto col-md-3 offset-md-1 justify-end'>
 <div class="group mobile-hide cordova-hide">
     <q-btn flat  @click.stop="saveOrRemove" class=''>
-      <q-icon name="favorites" v-bind:class="{'text-primary': inFavorites}" />
+      <q-icon name="favorite" v-bind:class="{'text-primary': inFavorites}" />
     </q-btn>  
 
     <q-btn flat  @click="openReddit" class=''>

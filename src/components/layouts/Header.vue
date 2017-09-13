@@ -17,14 +17,12 @@
     </q-toolbar-title>
 
 
-    <q-toolbar-title v-else class='text-center justify-center no-margin multiline'>
-        <div class="">
-        {{currentItem.raw_title}}
-        </div>
+       <q-card flat v-else class='text-center col-xs-0 col-md-10 no-wrap'>  <!-- New title info replacing old empty space -->
+        {{currentItem.raw_title}}<br>
         <span slot="subtitle" class='text-white'>
-          {{currentItem.subreddit}}
-        </span>
-    </q-toolbar-title>
+      {{currentItem.subreddit}}
+    </span>
+    </q-card flat>
 
     <div v-if='user'>
       <span class="text-primary mobile-hide cordova-hide">
