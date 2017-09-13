@@ -2,8 +2,9 @@
 
 <q-card inline class='no-margin full-width'>
 <q-item :item='item'  v-bind:class="{'bg-primary': isActive, 'text-black': isActive}">
-  <q-item-side v-if='!isPlaying' icon='play_arrow' highlight @click='clickItem' />
-  <q-item-side v-else icon='pause' highlight @click='clickItem' />
+  <q-item-side v-if='isPlaying' icon='pause' color='tertiary' @click='clickItem'/>
+  <q-item-side v-else-if='isPaused' icon='play_arrow' color='tertiary' @click='clickItem' />
+  <q-item-side v-else icon='play_arrow' color='white' @click='clickItem'/>
   <q-item-main>
     <div v-if="item.source === 'reddit'">
     <q-item-tile label>{{item.raw_title}}</q-item-tile>
@@ -52,6 +53,9 @@ export default {
     },
     isPlaying: function () {
       return this.isActive && this.currentlyPlaying
+    },
+    isPaused: function () {
+      return this.isActive && !this.currentlyPlaying
     },
     inFavorites: function () {
       return this.user.favorites.some((fav) => {
