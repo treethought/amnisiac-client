@@ -10,14 +10,6 @@ const state = {
   fetching: false
 }
 
-const getters = {
-  favorites: (state) => {
-    if (state.user) {
-      return state.user.favorites
-    }
-  }
-}
-
 const mutations = {
   login (state) {
     state.authPending = true
@@ -154,7 +146,6 @@ const actions = {
 export default {
   namespaced: true,
   state,
-  getters,
   mutations,
   actions
 }

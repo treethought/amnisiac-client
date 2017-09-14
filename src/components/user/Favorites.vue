@@ -31,7 +31,7 @@ export default {
       fetching: state => state.auth.fetching
     }),
     items () {
-      return this.$store.getters['auth/favorites']
+      return this.$store.getters['user/favorites']
     },
     reversedItems: function () {
       return this.reverse(this.items)

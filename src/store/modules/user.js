@@ -3,6 +3,14 @@ import {http} from '../../api/common.js'
 //   user
 // }
 
+const getters = {
+  favorites: (state) => {
+    if (state.user) {
+      return state.user.favorites
+    }
+  }
+}
+
 const actions = {
   saveItem ({dispatch}, item) {
     console.log('Saving item to favorites')
@@ -29,7 +37,7 @@ const actions = {
 export default {
   namespaced: true,
   // state,
-  // getters,
+  getters,
   // mutations,
   actions
 }
