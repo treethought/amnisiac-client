@@ -38,7 +38,7 @@ export default {
   computed: {
     ...mapState({
       authenticated: state => state.auth.authenticated,
-      user: state => state.auth.user
+      user: state => state.user.user
     }),
     redditQuery: function () {
       var sourceNames = []
@@ -54,12 +54,12 @@ export default {
     feedList,
     toggleSource
   },
-  beforeCreate () {
-    console.log('In before create!')
-    this.$store.dispatch('auth/fetchUser')
-  },
+  // beforeCreate () {
+  //   console.log('In before create!')
+  //   this.$store.dispatch('user/fetchUser').then(api.fetchItems(this.redditQuery, '', this))
+  // },
   created () {
-    this.$store.dispatch('auth/fetchUser').then(api.fetchItems(this.redditQuery, '', this))
+    this.$store.dispatch('user/fetchUser').then(api.fetchItems(this.redditQuery, '', this))
   },
   route: {
     // Check the users auth status befre allowing access

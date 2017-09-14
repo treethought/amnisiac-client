@@ -2,7 +2,7 @@
 
   <q-card class='bg-black text-center' v-show='playerVisible' v-bind:class="{'fixed-top': underLayVideo}"> 
       <q-card-actions align='end'><q-btn flat disable /></q-card-actions>
-       
+
     <q-card-media overlay-position='top'>
         <youtube v-model='player' :video-id.sync="currentItem.track_id"
                  @ready="onPlayerReady"
@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     ...mapState({
-      currentItem: state => state.player.currentItem,
+      currentItem: state => state.session.currentItem,
       playerVisible: state => state.player.playerVisible,
       targetTime: state => state.player.targetTime,
       trackTime: state => state.player.trackTime
@@ -83,12 +83,11 @@ export default {
       'setPaused',
       'setBuffering', // maybe set as callback for @buffering from player
       'setDuration',
-      'togglePlayer'
-    ]),
-    // actions to sync time
-    ...mapActions('player', [
-      'selectNext',
+      'togglePlayer',
       'setTime'
+    ]),
+    ...mapActions('session', [
+      'selectNext'
     ]),
     onPlayerReady (player) {
       console.log('player ready')

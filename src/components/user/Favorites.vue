@@ -32,6 +32,7 @@ export default {
     }),
     items () {
       return this.$store.getters['user/favorites']
+      // return this.$store.getters.favorites
     },
     reversedItems: function () {
       return this.reverse(this.items)
@@ -43,7 +44,7 @@ export default {
     }
   },
   ready () {
-    this.$store.dispatch('auth/fetchUser')
+    this.$store.dispatch('user/fetchUser')
     // .then(this.$store.commit('player/setPlaylist', this.reversedItems))
   },
   route: {

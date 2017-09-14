@@ -86,17 +86,17 @@ export default {
     addSources () {
       let reddit = this.redditQuery.join('+')
       let sc = this.scQuery.join('+')
-      this.$store.dispatch('auth/addSources', {reddit, sc})
+      this.$store.dispatch('user/addSources', {reddit, sc})
     },
     deleteSource (source) {
       console.log('deleting ' + source)
-      this.$store.dispatch('auth/removeSource', source)
+      this.$store.dispatch('user/removeSource', source)
     }
   },
   computed: {
     ...mapState({
       authenticated: state => state.auth.authenticated,
-      user: state => state.auth.user
+      user: state => state.user.user
     }),
     sources: function () {
       var sources = []
@@ -107,7 +107,7 @@ export default {
     }
   },
   beforeCreate () {
-    this.$store.dispatch('auth/fetchUser')
+    this.$store.dispatch('user/fetchUser')
   }
 }
 </script>

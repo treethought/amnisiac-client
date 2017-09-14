@@ -6,7 +6,7 @@ import store from '../store'
 // The object to be passed as a header for authenticated requests
 function getAuthHeader () {
   // console.log('Creating tokenString')
-  var tokenString = 'Bearer ' + LocalStorage.get.item('access_token')
+  var tokenString = 'Bearer ' + LocalStorage.get.item('accessToken')
   return tokenString
 }
 
@@ -33,7 +33,7 @@ http.interceptors.response.use((response) => { // intercept the global error
     originalRequest._retry = true // now it can be retried
     console.log('about to refresh and redirect')
     return httpRefresh.post('/auth/refresh', null).then((data) => {
-      store.commit('auth/setToken', data.data.access_token)
+      store.commit('auth/setAccessToken', data.data.access_token)
       store.commit('auth/setAuthenticated', true)
       originalRequest.headers['Authorization'] = getAuthHeader() // new header new token
       return http(originalRequest) // retry the request that errored out
@@ -58,7 +58,7 @@ http.interceptors.response.use((response) => { // intercept the global error
 // For refreshing tokens //
 function getRefreshHeader () {
   console.log('Creating refresh header')
-  var tokenString = 'Bearer ' + LocalStorage.get.item('refresh_token')
+  var tokenString = 'Bearer ' + LocalStorage.get.item('refreshToken')
   return tokenString
 }
 

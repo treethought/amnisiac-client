@@ -48,7 +48,7 @@
     },
     props: ['items', 'title'],
     created () {
-      this.$store.commit('player/setPlaylist', this.filteredItems)
+      this.$store.commit('session/setPlaylist', this.filteredItems)
     },
     data () {
       return {
@@ -57,7 +57,7 @@
     },
     watch: {
       filteredItems (newPlaylist) {
-        this.$store.commit('player/setPlaylist', newPlaylist)
+        this.$store.commit('session/setPlaylist', newPlaylist)
       }
     },
     methods: {
@@ -67,8 +67,8 @@
     },
     computed: {
       ...mapState({
-        currentIdx: state => state.player.currentIdx,
-        selectedSource: state => state.player.selectedSource
+        currentIdx: state => state.session.currentIdx,
+        selectedSource: state => state.session.selectedSource
       }),
       filteredItems: function () {
         if (this.selectedSource === 'all') { return this.items }

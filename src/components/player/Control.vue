@@ -134,13 +134,13 @@ export default {
   directives: { BackToTop },
   computed: {
     ...mapState({
-      user: state => state.auth.user,
+      user: state => state.user.user,
       currentlyPlaying: state => state.player.currentlyPlaying,
       buffering: state => state.player.buffering,
-      currentItem: state => state.player.currentItem,
       playerVisible: state => state.player.playerVisible,
+      currentDuration: state => state.player.currentDuration,
       currentTime: state => state.player.currentTime,
-      currentDuration: state => state.player.currentDuration
+      currentItem: state => state.session.currentItem
     }),
     cleanCurrentTime () {
       return this.cleanTime(this.currentTime)
@@ -162,8 +162,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('player', [
-      'seekTime',
+    ...mapActions('session', [
       'selectNext',
       'selectPrevious'
     ]),
@@ -173,7 +172,8 @@ export default {
     ]),
     ...mapMutations('player', [
       'togglePlayer',
-      'toggleMiniPlayer'
+      'toggleMiniPlayer',
+      'seekTime'
     ]),
     showPlayer () {
       if (!this.playerVisible) {

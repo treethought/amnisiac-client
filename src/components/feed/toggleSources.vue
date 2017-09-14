@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedSource: state => state.player.selectedSource
+      selectedSource: state => state.session.selectedSource
     }),
     selectOptions () {
       let options = [{label: 'all', value: 'all'}]
@@ -53,7 +53,7 @@ export default {
   watch: {
     activeSource () {
       console.log('setting source')
-      this.$store.commit('player/setSelectedSource', this.activeSource)
+      this.$store.commit('session/setSelectedSource', this.activeSource)
     }
   }
 }

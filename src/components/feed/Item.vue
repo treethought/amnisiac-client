@@ -36,10 +36,10 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.auth.user,
+      user: state => state.user.user,
       currentlyPlaying: state => state.player.currentlyPlaying,
-      currentIdx: state => state.player.currentIdx,
-      currentItem: state => state.player.currentItem
+      currentIdx: state => state.session.currentIdx,
+      currentItem: state => state.session.currentItem
     }),
     title: function () {
       if (this.item) {
@@ -65,9 +65,7 @@ export default {
   },
   methods: {
     clickItem (event) {
-      console.log('clicked ' + this.item)
-      console.log('clicked index ' + this.idx)
-      this.$store.commit('player/selectItem', this.payload)
+      this.$store.commit('session/selectItem', this.payload)
     },
     saveItem (event) {
       console.log('Saving item to favorites')

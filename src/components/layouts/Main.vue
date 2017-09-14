@@ -10,7 +10,13 @@
 
   <router-view></router-view>
 
+<!--   <div v-if="miniPlayerActive">
+    <mini-player></mini-player>
+  </div> -->
+
   <control slot="footer" v-if='currentItem'></control>
+  <!-- <div slot='footer' v-else></div> -->
+  <!-- <mini-player slot='footer' v-if='currentItem'></mini-player> -->
 
   </q-layout>
 </template>
@@ -21,6 +27,7 @@ import AppHeader from './Header'
 import LeftDrawer from './LeftDrawer'
 import Control from '../player/Control'
 import Player from '../player/Player'
+// import MiniPlayer from '../player/MiniPlayer'
 import { mapState } from 'vuex'
 export default {
   name: 'layout',
@@ -29,7 +36,8 @@ export default {
     AppHeader,
     LeftDrawer,
     Control,
-    Player
+    Player,
+    // MiniPlayer
   },
   methods: {
     logout () {
@@ -43,7 +51,8 @@ export default {
     ...mapState({
       authenticated: state => state.auth.authenticated,
       user: state => state.auth.user,
-      currentItem: state => state.player.currentItem
+      currentItem: state => state.session.currentItem,
+      // miniPlayerActive: state => state.player.miniPlayerActive
     })
   }
 }
