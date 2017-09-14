@@ -2,7 +2,7 @@
 
 
 
-  <q-card flat v-if='items' class='bg-tertiary'>
+  <q-card flat v-if='items' color='tertiary'>
   <!-- <q-window-resize-observable @resize="onResize" /> -->
     <q-card-title>
     <toggle-source  :sources='sources'></toggle-source>
@@ -39,6 +39,7 @@
   import Item from './Item'
   import toggleSource from './toggleSources'
   import {mapState} from 'vuex'
+  import {filter} from 'quasar'
   export default {
     name: 'feed-list',
     components: {
@@ -71,14 +72,7 @@
       }),
       filteredItems: function () {
         if (this.selectedSource === 'all') { return this.items }
-        var filtered = []
-        for (var i = 0; i < this.items.length; i++) {
-          let itemSource = this.items[i].subreddit
-          if (itemSource === this.selectedSource) {
-            filtered.push(this.items[i])
-          }
-        }
-        return [...new Set(filtered)]
+        return filter(this.selectedSource, {field: 'subreddit', list: this.items})
       },
       sources: function () {
         var sources = []
