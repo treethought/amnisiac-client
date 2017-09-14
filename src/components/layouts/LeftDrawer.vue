@@ -1,7 +1,7 @@
 <template>
 
   <!-- Drawer -->
-<div slot="left" class='bg-tertiary'>
+<div slot="left">
 
 <q-toolbar class='desktop-hide'>
     <q-btn flat @click="layout.toggleLeft()">
@@ -13,7 +13,7 @@
       <q-item-separator></q-item-separator>
 </q-toolbar>
 
-  <q-list no-border class='bg-tertiary text-white'>
+  <q-list no-border class='text-white'>
     <q-list-header>
 
       <div v-if='user' class='text-primary'>{{user.username}}</div>
@@ -29,7 +29,7 @@
       <q-item-main label="Listen" />
     </q-side-link>
     <q-side-link item v-if='authenticated' to="/favorites">
-      <q-item-side icon="favorites" color='primary'/>
+      <q-item-side icon="favorite" color='primary'/>
       <q-item-main label="Favorites" />
     </q-side-link>
     <q-side-link item v-if='authenticated' to="/dashboard">
