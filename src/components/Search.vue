@@ -1,30 +1,87 @@
 <template>
-  <div class="container">
+<div class="container">
 
-  <q-card  color='dark'>
-    <q-card-title>
-      Select Sources
-    </q-card-title>
+<q-card flat color='tertiary' class='relative-postion'>
+  <q-card-title>
+    Select Sources
+  </q-card-title>
+  <q-card-main>
+
+
+
+  <q-card color='secondary' class='text-left'>
     <q-card-main>
-      <multiselect v-model="redditQuery"
-                  :multiple='true'
-                  :close-on-select="false"
-                  :hide-selected="false"
-                  :options="redditSources"
-                  @input='submitSearch'
-                  >
 
-      <template slot="tag" scope="props">
-        <span class="custom__tag">
-        <span>{{ props.option }}, </span>
-        <!-- <span class="custom__remove" @click="props.remove(props.option)"> ❌ </span> -->
-        </span>
-      </template>
-                
-    </multiselect>
+      <q-field dark
+          icon="fa-reddit"
+          helper="i.e mathrock, listentothis"
+          labelWidth='1'>
+    
 
-     <q-card-actions>
-      <q-btn color='primary' @click="submitSearch">
+
+        <q-chips-input v-model='redditQuery'
+          float-label="Enter subreddits"
+          prefix='r/'
+          color='primary'
+          frame-color='secondary'
+          align='left'
+          dark
+          :after="[{
+            icon: 'explore',
+            error: false,
+            handler: showList
+          }]">
+              <q-autocomplete :static-data='redditStaticData' @selected="submitSearch" />
+        </q-chips-input>
+
+         </q-field>  
+       
+            
+
+      </q-card-main>
+    </q-card>
+
+
+
+<q-card class='hidden'>
+    <q-select class='' ref='redditList'
+            multiple
+            toggle
+            filter
+            filter-placeholder='Search subs'
+            dark
+
+            chips
+            v-model="redditQuery"
+            :options="redditOptions"
+            @change='submitSearch'
+            stack-label="Or select from list"
+          >
+          </q-select>    
+</q-card>
+
+
+<q-card color='secondary' class='text-left'>
+  <q-card-main>
+
+    <q-field dark
+      icon="fa-soundcloud"
+      color='pink'
+      inverted
+      helper="Enter soundcloud artists"
+      :labelWidth='1'>
+
+      <q-search icon='' dark color=''  v-model="scQuery" label='Select Sources'  placeholder="Search for soundcloud artists">
+          <q-autocomplete @search='autocompleteSC' @selected="submitSearch" />
+      </q-search>
+
+    </q-field>
+    
+  </q-card-main>
+</q-card>
+
+     <q-card-actions class=''>
+      <q-btn color='secondary' @click="submitSearch">
         Submit
       </q-btn>
     </q-card-actions>
@@ -35,52 +92,84 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
-import Multiselect from 'vue-multiselect'
+import { QField, QSelect, QAutocomplete, QSearch, QChipsInput } from 'quasar'
+import {http} from '../api/common.js'
+import {mapActions} from 'vuex'
 
-import api from '../api/api.js'
 export default {
   name: 'search-field',
   data () {
     return {
       redditSources: [],
       scOptions: [],
-      redditQuery: [],
-      scQuery: []
+      redditQuery: [], // list of sub names
+      scQuery: [],
+      fetching: true
     }
   },
   components: {
-    vSelect,
-    Multiselect
+    QField,
+    QSelect,
+    QAutocomplete,
+    QSearch,
+    QChipsInput
   },
   computed: {
-    // redditData: function () {
-    //   return {field: 'value', list: this.redditSources}
-    // }
-    redditData: function () {
-      var staticData = []
-      for (var i = 0; i < this.redditSources.length; i++) {
-        let sub = this.redditSources[i].toString()
-        let item = {name: sub, label: sub}
-        staticData.push(item)
-      }
-      return staticData
+
+    redditStaticData () {
+      return {field: 'label', list: this.redditOptions}
+    },
+    redditOptions () {
+      return this.optionsFromStrings(this.redditSources)
     }
   },
   created () {
-    this.getRedditSources()
+    console.log('Fetching reddit sources')
+    http.get('reddit/sources').then(response => {
+      console.log(response.status)
+      this.redditSources = response.data
+      this.fetching = false
+    }).catch(error => {
+      console.log('error fetching reddit sources ' + error.message)
+    })
   },
   methods: {
-    getRedditSources () {
-      api.fetchRedditSources(this)
+    ...mapActions('session', [
+      'fetchItems'
+    ]),
+    showList () {
+      this.$refs.redditList.open()
     },
-    autocompleteSC (search, loading) {
-      api.fetchScSources(this, search, loading)
+    optionsFromStrings (strings) {
+      // used for providing options to q-select or autocomplete done()
+      let options = []
+      for (var i = 0; i < strings.length; i++) {
+        let val = strings[i].toString()
+        let option = {'label': val, 'value': val}
+        options.push(option)
+      }
+      return options
+    },
+    autocompleteSC (search, done) {
+      console.log('Searching sc for -  ' + search)
+      let params = {q: search}
+      http.get('sc/autocomplete', {params: params})
+        .then(response => {
+          console.log(response.status)
+          let artists = response.data.results
+          let results = this.optionsFromStrings(artists)
+          done(results)
+        })
+        .catch(error => {
+          console.log('error ' + error)
+          done([])
+        })
     },
     submitSearch () {
       let reddit = this.redditQuery.join('+')
-      let sc = this.scQuery.join('+')
-      this.$root.$emit('submit-search', reddit, sc)
+      let sc = this.scQuery
+      let searchParams = {reddit: reddit, sc: sc}
+      this.fetchItems(searchParams)
     }
   }
 }
