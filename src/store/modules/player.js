@@ -22,9 +22,12 @@ const mutations = {
     let newStatus = !state.playerVisible
     state.playerVisible = newStatus
   },
-  setPlaying (state, player) {
+  setPlaying (state, duration) {
+    if (duration) {
+      console.log('change duration from ' + state.currentDuration + ' to ' + duration)
+      state.currentDuration = duration
+    }
     console.log('setting playing')
-    state.currentDuration = parseInt(player.getDuration()) // metadata loaded after video beings playing
     state.currentlyPlaying = true
     state.buffering = false
     state.trackTime = true
@@ -42,11 +45,12 @@ const mutations = {
     state.trackTime = false
   },
   setTime (state, time) {
+    // console.log('setting time to ' + time)
     state.currentTime = time
   },
   setDuration (state, duration) {
+    console.log('change duration from ' + state.currentDuration + ' to ' + duration)
     state.currentDuration = duration
-    console.log('duration set to ' + duration)
   },
   seekTime (state, time) {
     state.targetTime = time
@@ -55,6 +59,14 @@ const mutations = {
     console.log('toggling miniplayer')
     let newStatus = !state.miniPlayerActive
     state.miniPlayerActive = newStatus
+  },
+  restartTime (state) {
+    console.log('Refreshing time info')
+    console.log('change time from ' + state.currentTime + ' to 0')
+    console.log('change duration from ' + state.currentDuration + ' to 1')
+    state.currentlyPlaying = false
+    state.currentTime = 0
+    state.currentDuration = 1
   }
 }
 
