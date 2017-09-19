@@ -58,7 +58,7 @@ export default {
     },
     ...mapState({
       authenticated: state => state.auth.authenticated,
-      user: state => state.auth.user,
+      user: state => state.user.user,
       currentItem: state => state.session.currentItem
     })
   }

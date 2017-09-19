@@ -25,7 +25,6 @@
 import Player from '../player/Player'
 import feedList from './feedList'
 import searchField from '../Search'
-import api from '../../api/api.js'
 import toggleSource from './toggleSources'
 
 export default {
@@ -38,22 +37,16 @@ export default {
   },
   computed: {
     selectedSource () {
-      return this.$store.state.selectedSource
+      return this.$store.state.session.selectedSource
+    },
+    items () {
+      return this.$store.state.session.currentPlaylist
     }
   },
   data () {
     return {
-      items: null,
       isLoading: false,
       alertError: false
-    }
-  },
-  created () {
-    this.$root.$on('submit-search', this.submitSearch)
-  },
-  methods: {
-    submitSearch (reddit, sc) {
-      api.fetchItems(reddit, sc, this)
     }
   }
 }
