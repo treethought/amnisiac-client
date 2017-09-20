@@ -14,11 +14,9 @@
     "babel-runtime": "^6.25.0",
     "quasar-extras": "0.x",
     "quasar-framework": "^0.14.1",
+    "soundcloud": "^3.2.2",
     "vue": "~2.3.4",
-    "vue-multiselect": "^2.0.2",
     "vue-router": "^2.7.0",
-    "vue-select": "^2.2.0",
-    "vue-stash": "^2.0.1-beta",
     "vue-youtube-embed": "^2.1.1",
     "vuex": "^2.3.1"
   },
