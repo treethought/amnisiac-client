@@ -36,8 +36,6 @@
 
          </q-field>  
        
-            
-
       </q-card-main>
     </q-card>
 
@@ -71,7 +69,7 @@
       helper="Enter soundcloud artists"
       :labelWidth='1'>
 
-      <q-search icon='' dark color=''  v-model="scQuery" label='Select Sources'  placeholder="Search for soundcloud artists">
+      <q-search dark icon=''  v-model="scQuery" float-label="Search soundcloud artists">
           <q-autocomplete @search='autocompleteSC' @selected="submitSearch" />
       </q-search>
 
@@ -125,7 +123,7 @@ export default {
   },
   created () {
     console.log('Fetching reddit sources')
-    http.get('reddit/sources').then(response => {
+    http.get('platforms/reddit/sources').then(response => {
       console.log(response.status)
       this.redditSources = response.data
       this.fetching = false
@@ -153,7 +151,7 @@ export default {
     autocompleteSC (search, done) {
       console.log('Searching sc for -  ' + search)
       let params = {q: search}
-      http.get('sc/autocomplete', {params: params})
+      http.get('platforms/sc_autocomplete', {params: params})
         .then(response => {
           console.log(response.status)
           let artists = response.data.results

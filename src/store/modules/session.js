@@ -59,7 +59,7 @@ const actions = {
       sc_query: sc
     }
 
-    return http.get('reddit/search', { params: searchParams })
+    return http.get('platforms/search', { params: searchParams })
       .then(response => {
         console.log(response.status + ' ' + response.statusText)
         commit('setPlaylist', response.data)
@@ -76,4 +76,3 @@ export default {
   mutations,
   actions
 }
-
