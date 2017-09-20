@@ -6,11 +6,15 @@
   <!-- <q-window-resize-observable @resize="onResize" /> -->
     <q-card-title>
     <toggle-source  :sources='sources'></toggle-source>
+<!--     <q-search dark  label='Select Sources' placeholder="Search items">
+
+        <q-autocomplete :static-data='searchStaticData' />
+    </q-search> -->
     </q-card-title>
 
      <q-list class='bg-tertiary text-white'>
 
-<q-scroll-area class=''
+<q-scroll-area class='scroll'
   :style="{height: feedHeight}"
   :thumb-style="{
     right: '4px',
@@ -39,12 +43,14 @@
   import Item from './Item'
   import toggleSource from './toggleSources'
   import {mapState} from 'vuex'
-  import {filter} from 'quasar'
+  import {filter, QSearch, QAutocomplete} from 'quasar'
   export default {
     name: 'feed-list',
     components: {
       Item,
-      toggleSource
+      toggleSource,
+      QSearch,
+      QAutocomplete
     },
     props: ['items', 'title'],
     created () {
@@ -63,9 +69,27 @@
     methods: {
       onResize (size) {
         this.feedHeight = size.height
+      },
+      optionsFromStrings (strings) {
+      // used for providing options to q-select or autocomplete done()
+        let options = []
+        for (var i = 0; i < strings.length; i++) {
+          let val = strings[i].toString()
+          let option = {'label': val, 'value': val}
+          options.push(option)
+        }
+        return options
       }
     },
     computed: {
+      searchStaticData () {
+        let titles = []
+        for (var i = this.items.length - 1; i >= 0; i--) {
+          titles.push(this.items[i].raw_title)
+        }
+        let options = this.optionsFromStrings(titles)
+        return {field: 'label', list: options}
+      },
       ...mapState({
         currentIdx: state => state.session.currentIdx,
         selectedSource: state => state.session.selectedSource
@@ -77,9 +101,14 @@
       sources: function () {
         var sources = []
         for (var i = 0; i < this.items.length; i++) {
-          var s = this.items[i].subreddit
-          if (s !== '') {
-            sources.push(s)
+          let item = this.items[i]
+          if (item.source === 'sc') {
+            sources.push(item.artist)
+          }
+          else if (item.source === 'reddit') {
+            if (item.subreddit !== '') {
+              sources.push(item.subreddit)
+            }
           }
         }
         return [...new Set(sources)]
