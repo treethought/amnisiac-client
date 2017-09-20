@@ -2,20 +2,20 @@
 <div class="container">
 
   <div class="container">
-    <search-field></search-field>
+    <q-card flat class='text-white'>
+      <q-card-title>
+        Serach Sources
+      </q-card-title>
+    </q-card>
+    <search-field v-model='searchParams' :onSubmit='submitSearch'></search-field>
   </div>
 
 
- <div v-if='items'>
+ <div v-if='items.length > 0'>
     <feed-list :items='items'></feed-list>
   </div>
 
    <q-inner-loading :visible="isLoading" />
-
-
-  <div v-if='alertError'>
-    <p>Sorry, an error occured when contacting the server</p>
-  </div>
   
 </div>
 
@@ -26,7 +26,7 @@ import Player from '../player/Player'
 import feedList from './feedList'
 import searchField from '../Search'
 import toggleSource from './toggleSources'
-
+import {mapActions} from 'vuex'
 export default {
   name: 'listen',
   components: {
@@ -36,9 +36,6 @@ export default {
     toggleSource
   },
   computed: {
-    selectedSource () {
-      return this.$store.state.session.selectedSource
-    },
     items () {
       return this.$store.state.session.currentPlaylist
     }
@@ -46,7 +43,15 @@ export default {
   data () {
     return {
       isLoading: false,
-      alertError: false
+      searchParams: {reddit: '', sc: ''}
+    }
+  },
+  methods: {
+    ...mapActions('session', [
+      'fetchItems'
+    ]),
+    submitSearch () {
+      this.fetchItems(this.searchParams)
     }
   }
 }

@@ -1,28 +1,21 @@
 <template>
-<div class="container">
 
 <q-card flat color='tertiary' class='relative-postion'>
-  <q-card-title>
-    Select Sources
-  </q-card-title>
   <q-card-main>
-
-
 
   <q-card color='secondary' class='text-left'>
     <q-card-main>
 
       <q-field dark
           icon="fa-reddit"
-          helper="i.e mathrock, listentothis"
-          labelWidth='1'>
+          helper="i.e mathrock, listentothis">
     
 
 
-        <q-chips-input v-model='redditQuery'
+        <q-chips-input v-model='redditQuery' @change='updateValue'
           float-label="Enter subreddits"
           prefix='r/'
-          color='primary'
+          color='secondary'
           frame-color='secondary'
           align='left'
           dark
@@ -31,7 +24,7 @@
             error: false,
             handler: showList
           }]">
-              <q-autocomplete :static-data='redditStaticData' @selected="submitSearch" />
+              <q-autocomplete :static-data='redditStaticData' @selected="onSubmit()" />
         </q-chips-input>
 
          </q-field>  
@@ -52,7 +45,7 @@
             chips
             v-model="redditQuery"
             :options="redditOptions"
-            @change='submitSearch'
+            @change='updateValue'
             stack-label="Or select from list"
           >
           </q-select>    
@@ -67,10 +60,10 @@
       color='pink'
       inverted
       helper="Enter soundcloud artists"
-      :labelWidth='1'>
+     >
 
-      <q-search dark icon=''  v-model="scQuery" float-label="Search soundcloud artists">
-          <q-autocomplete @search='autocompleteSC' @selected="submitSearch" />
+      <q-search dark icon='' v-model="scQuery" @change='updateValue' float-label="Search soundcloud artists">
+          <q-autocomplete @search='autocompleteSC' @selected="onSubmit()" />
       </q-search>
 
     </q-field>
@@ -79,23 +72,31 @@
 </q-card>
 
      <q-card-actions class=''>
-      <q-btn color='secondary' @click="submitSearch">
+      <q-btn color='secondary' @click="onSubmit()">
         Submit
       </q-btn>
     </q-card-actions>
     </q-card-main>
    
   </q-card>
-  </div>
 </template>
 
 <script>
 import { QField, QSelect, QAutocomplete, QSearch, QChipsInput } from 'quasar'
 import {http} from '../api/common.js'
-import {mapActions} from 'vuex'
 
 export default {
   name: 'search-field',
+  props: {
+    value: {
+      type: Object,
+      required: true
+    },
+    onSubmit: {
+      type: Function,
+      required: true
+    }
+  },
   data () {
     return {
       redditSources: [],
@@ -113,12 +114,16 @@ export default {
     QChipsInput
   },
   computed: {
-
     redditStaticData () {
       return {field: 'label', list: this.redditOptions}
     },
     redditOptions () {
       return this.optionsFromStrings(this.redditSources)
+    },
+    searchParams () {
+      let reddit = this.redditQuery.join('+')
+      let sc = this.scQuery
+      return {reddit: reddit, sc: sc}
     }
   },
   created () {
@@ -132,9 +137,9 @@ export default {
     })
   },
   methods: {
-    ...mapActions('session', [
-      'fetchItems'
-    ]),
+    updateValue () {
+      this.$emit('input', this.searchParams)
+    },
     showList () {
       this.$refs.redditList.open()
     },
@@ -162,22 +167,11 @@ export default {
           console.log('error ' + error)
           done([])
         })
-    },
-    submitSearch () {
-      let reddit = this.redditQuery.join('+')
-      let sc = this.scQuery
-      let searchParams = {reddit: reddit, sc: sc}
-      this.fetchItems(searchParams)
     }
   }
 }
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
-  .btn {
-  color: black;
-  background-color: white;
-  border-color: purple;
-}
+
 </style>

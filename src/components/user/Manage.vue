@@ -18,37 +18,13 @@
 </div>
 
 <hr>
-
-<div>
-
-<q-card inline color='secondary' style="width: 500px">
-  <q-card-title>Add Subreddits</q-card-title>
-  <q-card-main>
-    <form id="form" v-on:submit.prevent="addSources">
-          <v-select v-model='redditQuery'
-                    :options='redditSources'
-                    multiple
-                    placeholder='Search Reddit'>
-          </v-select>
-    </form>
-
-  </q-card-main>
-  </q-card>
-
-  <q-card color='secondary' inline style="width: 500px">
-    <q-card-title>Add Soundcloud Artists</q-card-title>
-    <q-card-main>
-      <form id="form" v-on:submit.prevent="addSources">
-          <v-select v-model='scQuery'
-                    :options='scOptions'
-                    :on-search="autocompleteSC"
-                    multiple
-                    placeholder='Search Soundcloud'>  
-          </v-select>
-      </form>
-  </q-card-main>
+<q-card flat class='text-white'>
+  <q-card-title>
+    Subscribe to New Sources
+  </q-card-title>
 </q-card>
-<br>
+<search-field v-model='sourcesToAdd' :onSubmit='addSources'></search-field>
+
 <q-btn color='white' @click.native="addSources">Subscribe</q-btn> 
 
 
@@ -58,35 +34,20 @@
 </template>
 
 <script>
-import api from '../../api/api.js'
-import vSelect from 'vue-select'
+import SearchField from '../Search'
 import {mapState} from 'vuex'
 export default {
   data () {
     return {
-      redditSources: [],
-      scOptions: [],
-      redditQuery: [],
-      scQuery: []
+      sourcesToAdd: {reddit: '', sc: ''}
     }
   },
   components: {
-    vSelect
-  },
-  created () {
-    this.getRedditSources()
+    SearchField
   },
   methods: {
-    getRedditSources () {
-      api.fetchRedditSources(this)
-    },
-    autocompleteSC (search, loading) {
-      api.fetchScSources(this, search, loading)
-    },
     addSources () {
-      let reddit = this.redditQuery.join('+')
-      let sc = this.scQuery.join('+')
-      this.$store.dispatch('user/addSources', {reddit, sc})
+      this.$store.dispatch('user/addSources', this.sourcesToAdd)
     },
     deleteSource (source) {
       console.log('deleting ' + source)
@@ -100,8 +61,10 @@ export default {
     }),
     sources: function () {
       var sources = []
-      for (var i = 0; i < this.user.feeds.length; i++) {
-        sources.push(this.user.feeds[i])
+      if (this.user.feeds) {
+        for (var i = 0; i < this.user.feeds.length; i++) {
+          sources.push(this.user.feeds[i])
+        }
       }
       return sources
     }
