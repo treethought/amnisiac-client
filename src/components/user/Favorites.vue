@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// import api from '../../api/api.js'
 import feedList from '../feed/feedList'
 import toggleSource from '../feed/toggleSources'
 import {mapState} from 'vuex'
