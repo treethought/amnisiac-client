@@ -11,6 +11,13 @@
     <q-item-tile sublabel>
     <q-icon name="fa-reddit" /> {{item.subreddit}}</q-item-tile>
     </div>
+    <div v-if="item.source === 'sc'">
+    <q-item-tile label>{{item.title}}</q-item-tile>
+    <!-- <q-item-tile icon='fa-soundcloud'></q-item-tile> -->
+    <q-item-tile sublabel>
+    <q-icon name="fa-soundcloud" /> {{item.artist}}</q-item-tile>
+    </div>
+
   </q-item-main>
   <div v-if='user'>
   <q-item-tile right v-if='inFavorites' icon='favorite' @click='removeItem'></q-item-tile>
@@ -27,7 +34,7 @@
 import { Toast } from 'quasar'
 import {mapState} from 'vuex'
 export default {
-  name: 'item',
+  name: 'track-item',
   props: ['item', 'idx'],
   data () {
     return {
