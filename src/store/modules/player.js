@@ -53,6 +53,7 @@ const mutations = {
     state.currentDuration = duration
   },
   seekTime (state, time) {
+    console.log('seeking')
     state.targetTime = time
   },
   toggleMiniPlayer (state) {
@@ -64,6 +65,7 @@ const mutations = {
     console.log('Refreshing time info')
     console.log('change time from ' + state.currentTime + ' to 0')
     console.log('change duration from ' + state.currentDuration + ' to 1')
+    state.trackTime = false
     state.currentlyPlaying = false
     state.currentTime = 0
     state.currentDuration = 1
