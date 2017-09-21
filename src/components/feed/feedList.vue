@@ -25,11 +25,11 @@
   }"
   :delay="1500"
 >
-        <item v-for='(item, idx) in filteredItems'
+        <track-item v-for='(item, idx) in filteredItems'
                 :item='item'
                 :idx=idx
                 :key='item.key'>
-        </item>
+        </track-item>
         </q-scroll-area>
       </q-list>
 
@@ -40,14 +40,14 @@
 </template>
 
 <script>
-  import Item from './Item'
+  import TrackItem from './TrackItem'
   import toggleSource from './toggleSources'
   // import {mapState} from 'vuex'
   import {filter, QSearch, QAutocomplete} from 'quasar'
   export default {
     name: 'feed-list',
     components: {
-      Item,
+      TrackItem,
       toggleSource,
       QSearch,
       QAutocomplete
