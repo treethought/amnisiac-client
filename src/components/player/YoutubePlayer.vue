@@ -47,6 +47,7 @@ export default {
   },
   destroyed () {
     console.log('Destroying youtube player')
+    clearInterval(this.tracker)
   },
   watch: {
     trackTime (status) {
