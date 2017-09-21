@@ -6,11 +6,10 @@
     <q-card-media overlay-position='top'>
         <youtube v-model='player' :video-id.sync="currentItem.track_id"
                  @ready="onPlayerReady"
-                 @qued='onPlayerReady'
-                 @playing="setPlaying"
+                 @playing="onPlaying"
                  @paused='setPaused'
 
-                 @ended='selectNext'
+                 @ended='onPlayerFinsish'
                  @error='onError'
                  :player-vars="{autoplay: 1, controls: 0, color: 'white', enablejsapi: 1, playsinline: 1, rel: 0, showinfo: 0,
                  widget_referrer: 'www.amnisiac.com'}"
@@ -37,7 +36,7 @@
 <script>
 import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
-  name: 'player',
+  name: 'youtube-player',
   data () {
     return {
       player: null,
@@ -46,14 +45,8 @@ export default {
       underLayVideo: false
     }
   },
-  created () {
-    // responds to events emitted from Control
-    this.$root.$on('pause', this.pause)
-    this.$root.$on('resume', this.resume)
-  },
   destroyed () {
-    this.$root.$off('pause')
-    this.$root.$off('resume')
+    console.log('Destroying youtube player')
   },
   watch: {
     trackTime (status) {
@@ -64,8 +57,13 @@ export default {
       console.log('Detected new target time')
       this.seek(newTime)
     },
-    currentItem () { // new item selected/played
-      this.setDuration(parseInt(this.player.getDuration()))
+    currentlyPlaying (isPlaying) {
+      if (isPlaying) {
+        this.player.playVideo()
+      }
+      else {
+        this.player.pauseVideo()
+      }
     }
   },
   computed: {
@@ -73,13 +71,14 @@ export default {
       currentItem: state => state.session.currentItem,
       playerVisible: state => state.player.playerVisible,
       targetTime: state => state.player.targetTime,
-      trackTime: state => state.player.trackTime
+      trackTime: state => state.player.trackTime,
+      currentlyPlaying: state => state.player.currentlyPlaying
     })
   },
   methods: {
     // commits to sync player status with store
     ...mapMutations('player', [
-      'setPlaying', // map `this.increment()` to `this.$store.dispatch('increment')`
+      'setPlaying',
       'setPaused',
       'setBuffering', // maybe set as callback for @buffering from player
       'setDuration',
@@ -94,11 +93,11 @@ export default {
       this.player = player
       this.player.playVideo()
     },
-    resume () {
-      this.player.playVideo()
+    onPlayerFinsish () {
+      this.selectNext()
     },
-    pause () {
-      this.player.pauseVideo()
+    onPlaying (player) {
+      this.setPlaying(parseInt(this.player.getDuration()))
     },
     startTracking () {
       this.tracker = setInterval(this.getTime, 100)
@@ -110,8 +109,9 @@ export default {
     seek (time) {
       this.player.seekTo(time, true)
     },
-    onError () {
+    onError (error) {
       console.log('ERROR')
+      console.log(error)
     }
 
   }
