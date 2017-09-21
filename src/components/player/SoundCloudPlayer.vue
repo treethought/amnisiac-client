@@ -111,8 +111,6 @@ export default {
       let path = '/tracks/' + this.currentItem.track_id
       let self = this
       SC.stream(path).then(function (player) {
-        console.log('Creating SC player')
-        console.log(player)
         player.on('time', self.timeFromPlayer)
         player.on('state-change', self.onStateChange)
         self.player = player

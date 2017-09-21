@@ -45,6 +45,10 @@ export default {
       underLayVideo: false
     }
   },
+  // created () {
+  //   console.log('Creating youtube')
+  //   this.restartTime()
+  // },
   destroyed () {
     console.log('Destroying youtube player')
     clearInterval(this.tracker)
@@ -84,7 +88,8 @@ export default {
       'setBuffering', // maybe set as callback for @buffering from player
       'setDuration',
       'togglePlayer',
-      'setTime'
+      'setTime',
+      'restartTime'
     ]),
     ...mapActions('session', [
       'selectNext'

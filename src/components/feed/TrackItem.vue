@@ -73,6 +73,9 @@ export default {
   methods: {
     clickItem (event) {
       this.$store.commit('session/selectItem', this.payload)
+      if (!this.currentlyPlaying) {
+        this.$store.commit('player/setPlaying')
+      }
     },
     saveItem (event) {
       console.log('Saving item to favorites')

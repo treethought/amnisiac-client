@@ -13,14 +13,14 @@
   </q-card-media>
 
 
-    <q-card flat class='text-center col-xs-0 col-md-3 mobile-hide cordova-hide'>  <!-- New title info replacing old empty space -->
+
+    <q-card flat class='text-center col-xs-0 col-md-3 mobile-hide cordova-hide'> 
         {{currentItem.raw_title}}<br>
         <span slot="subtitle" class='text-white'>
       {{currentItem.subreddit}}
     </span>
     </q-card flat>
 
-  <!-- </q-toolbar> -->
 
 
 <q-toolbar-title class='text-center fit col-xs-8 col-md-4'>
