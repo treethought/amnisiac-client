@@ -5,7 +5,8 @@ import router from '../../router'
 const state = {
   authenticated: !!LocalStorage.get.item('accessToken'),
   token: LocalStorage.get.item('accessToken'),
-  refreshToken: LocalStorage.get.item('refreshToken')
+  refreshToken: LocalStorage.get.item('refreshToken'),
+  ScClientId: LocalStorage.get.item('ScClientId')
 }
 
 const mutations = {
@@ -22,6 +23,10 @@ const mutations = {
   setAccessToken (state, token) {
     state.token = token
     LocalStorage.set('accessToken', token)
+  },
+  setScClientId (state, id) {
+    state.ScClientId = id
+    LocalStorage.set('ScClientId', id)
   }
 }
 
@@ -37,6 +42,17 @@ const actions = {
       .catch(error => {
         // context.commit('setAuthenticated', false)
         console.log('Auth failed ' + error.message)
+      })
+  },
+  fetchScClientId ({commit}) {
+    console.log('Fetching SC CLient')
+    return http.get('auth/sc_client')
+      .then(response => {
+        commit('setScClientId', response.data)
+        console.log('received sc client id')
+      })
+      .catch(error => {
+        console.log('Failed to grab sc client id ' + error.message)
       })
   },
   registerUser ({commit}, creds) {

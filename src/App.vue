@@ -14,12 +14,14 @@ export default {
   computed: {
     ...mapState({
       authenticated: state => state.auth.authenticated,
-      user: state => state.user.user
+      user: state => state.user.user,
+      ScClientId: state => state.auth.ScClientId
     })
   },
   methods: {
     ...mapActions('auth', [
-      'authorize'
+      'authorize',
+      'fetchScClientId'
     ]),
     ...mapActions('user', [
       'fetchUser'
@@ -27,6 +29,9 @@ export default {
   },
   created () {
     console.log('in created, checking auth status')
+    if (!this.ScClientId) {
+      this.fetchScClientId()
+    }
     if (this.authenticated) {
       console.log('fetching user')
       this.fetchUser()

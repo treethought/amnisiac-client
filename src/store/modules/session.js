@@ -9,6 +9,21 @@ const state = {
   currentItem: null
 }
 
+const getters = {
+  currentIsYoutube (state) {
+    if (!state.currentItem) { return false }
+    else {
+      return state.currentItem.domain.indexOf('you') !== -1
+    }
+  },
+  currentIsSC (state) {
+    if (!state.currentItem) { return false }
+    else {
+      return state.currentItem.domain.indexOf('sound') !== -1
+    }
+  }
+}
+
 const mutations = {
   setRedditQuery (state, subreddits) {
     state.redditQuery = subreddits.join('+')
@@ -73,6 +88,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }
