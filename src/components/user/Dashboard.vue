@@ -25,7 +25,7 @@ export default {
   name: 'dashboard',
   data () {
     return {
-      // items: [],
+      items: [],
       isLoading: false,
       alertError: false
     }
@@ -40,27 +40,51 @@ export default {
     ...mapState({
       authenticated: state => state.auth.authenticated,
       user: state => state.user.user,
-      items: state => state.session.currentPlaylist
+      currentPlaylist: state => state.session.currentPlaylist // set by fetching items
     }),
-    redditQuery: function () {
+    redditQuery () {
       var sourceNames = []
       if (this.user) {
         for (var i = 0; i < this.user.feeds.length; i++) {
-          sourceNames.push(this.user.feeds[i].name.replace('/r/', ''))
+          let feed = this.user.feeds[i]
+          if (feed.domain === 'reddit') {
+            sourceNames.push(feed.name.replace('/r/', ''))
+          }
         }
       }
       return sourceNames.join('+')
+    },
+    scQuery () {
+      var artists = []
+      if (this.user) {
+        for (var i = 0; i < this.user.feeds.length; i++) {
+          let feed = this.user.feeds[i]
+          if (feed.domain === 'sc') {
+            artists.push(feed.name)
+          }
+        }
+      }
+      return artists.join('+')
     }
   },
   components: {
     feedList,
     toggleSource
   },
+  beforeCreate () {
+    if (!this.user) {
+      this.$store.dispatch('user/fetchUser')
+    }
+  },
   created () {
     this.isLoading = true
-    let reddit = this.redditQuery
-    let searchParams = {reddit: reddit, sc: ''}
-    this.fetchUser().then(this.fetchItems(searchParams)).then(this.isLoading = false)
+    let searchParams = {reddit: this.redditQuery, sc: this.scQuery}
+    let self = this
+    this.fetchItems(searchParams).then(function () {
+      console.log('Setting items for dashboard')
+      self.items = self.currentPlaylist
+      self.isLoading = false
+    })
   },
   route: {
     // Check the users auth status befre allowing access
