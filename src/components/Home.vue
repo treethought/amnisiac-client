@@ -2,12 +2,16 @@
 
 <!-- <div class='bg-white'> -->
 
-<q-card  color='secondary' flat class='text-center'>
+<q-card  color='tertiary' flat class='text-center'>
   <q-card-title >
-   <h1 class="display-2 text-primary">amnis<span>!ac</span></h1>
+   <h1 class="display-2 text-primary">a<span>m</span>nis<span>!ac</span></h1>
+   <!-- <q-btn round flat>
+   <img src="../assets/icons/logo-small.png" class='full-height' height='120'>
+   </q-btn> -->
+  
   </q-card-title>
   <q-card-main class='text-white'>
-    <img src="../assets/icons/mtn-stream.png"><br>
+    <img src="../assets/icons/mtn-stream.png" class='responsive'><br>
     
     <p class="lead">Discover new music by subscribing to subreddits and soundcloud users</p>
     <p>Built with Flask, Vue.JS, and Quasar</p>
