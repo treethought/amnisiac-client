@@ -6,38 +6,33 @@
   
   <left-drawer slot='left' class='bg-tertiary'></left-drawer>
 
-  <player v-if='currentItem'></player>
+  <youtube-player v-if='currentIsYoutube'></youtube-player>
+  <soundcloud-player v-else-if='currentIsSC'></soundcloud-player>
 
   <router-view></router-view>
 
-<!--   <div v-if="miniPlayerActive">
-    <mini-player></mini-player>
-  </div> -->
 
   <control slot="footer" v-if='currentItem'></control>
-  <!-- <div slot='footer' v-else></div> -->
-  <!-- <mini-player slot='footer' v-if='currentItem'></mini-player> -->
 
   </q-layout>
 </template>
 
 <script>
-// import auth from '../api/auth.js'
 import AppHeader from './Header'
 import LeftDrawer from './LeftDrawer'
 import Control from '../player/Control'
-import Player from '../player/Player'
-// import MiniPlayer from '../player/MiniPlayer'
-import { mapState } from 'vuex'
+import YoutubePlayer from '../player/YoutubePlayer'
+import SoundcloudPlayer from '../player/SoundCloudPlayer'
+
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'layout',
-  // store: ['authenticated', 'user', 'currentItem'],
   components: {
     AppHeader,
     LeftDrawer,
     Control,
-    Player,
-    // MiniPlayer
+    YoutubePlayer,
+    SoundcloudPlayer
   },
   methods: {
     logout () {
@@ -48,11 +43,14 @@ export default {
     title () {
       return this.$route.name
     },
+    ...mapGetters('session', [
+      'currentIsYoutube',
+      'currentIsSC'
+    ]),
     ...mapState({
       authenticated: state => state.auth.authenticated,
       user: state => state.auth.user,
-      currentItem: state => state.session.currentItem,
-      // miniPlayerActive: state => state.player.miniPlayerActive
+      currentItem: state => state.session.currentItem
     })
   }
 }
@@ -64,22 +62,4 @@ export default {
     padding:0;
 }
 
-/*.layout-aside {
-  background: #555
-}*/
-
-h4 {
-  /*color: purple !important;*/
-  font-family: 'Comfortaa', cursive;
-    /*font-size: 60px;*/
-
-}
-span {
-  color: black !important;
-  /*color: white !important;*/
-}
-
-/*h4 {
-  font-family: Comfortaa;
-}*/
 </style>
