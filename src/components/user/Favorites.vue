@@ -45,7 +45,7 @@ export default {
   },
   ready () {
     this.$store.dispatch('user/fetchUser')
-    // .then(this.$store.commit('player/setPlaylist', this.reversedItems))
+      .then(this.$store.commit('session/setPlaylist', this.reversedItems))
   },
   route: {
     // Check the users auth status before allowing access
