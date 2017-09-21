@@ -22,18 +22,14 @@
 </template>
 
 <script>
-import Player from '../player/Player'
 import feedList from './feedList'
 import searchField from '../Search'
-import toggleSource from './toggleSources'
 import {mapActions} from 'vuex'
 export default {
   name: 'listen',
   components: {
-    Player,
     feedList,
-    searchField,
-    toggleSource
+    searchField
   },
   computed: {
     items () {
