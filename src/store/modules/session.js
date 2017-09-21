@@ -61,8 +61,8 @@ const actions = {
     let prevIdx = state.currentIdx - 1
     let prevItem = state.currentPlaylist[prevIdx]
     let payload = {item: prevItem, idx: prevIdx}
-    commit('player/restartTime', null, { root: true })
     commit('selectItem', payload)
+    commit('player/restartTime', null, { root: true })
   },
   fetchItems ({commit}, {reddit, sc}) {
     console.log('Fetching items with query')
