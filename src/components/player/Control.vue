@@ -2,32 +2,15 @@
 
 <div>
 <div class='bg-secondary'>
- <q-slider :disable='!currentDuration' :value='currentTime' @change='seekTime' :min='0' :max='currentDuration'></q-slider>
+ <q-slider class='' :disable='!controlDuration' :value='controlTime' @change='seekTime' :min='0' :max='controlDuration'></q-slider>
 </div>
-
-<!--   <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1">
-
-
-    <q-toolbar-title class='text-center'>
-        {{currentItem.raw_title}}
-        <span slot="subtitle" class='text-white'>
-      {{currentItem.subreddit}}
-    </span>
-    </q-toolbar-title>
-
-  </q-toolbar> -->
-
-
 
 <q-toolbar class='row items-start'>
 
 
   <q-card-media inline class='col-xs-2 col-md-1 no-margin no-gutter' @click='toTop'>
-    <img class='responsive' :srcset="thumbnailSrc">
+    <img class='responsive' :src="thumbnailSrc">
   </q-card-media>
-
-
-    <!-- <q-toolbar slot='header' class="justify-center no-margin mobile-hide cordova-hide" :padding="1"> -->
 
 
     <q-card flat class='text-center col-xs-0 col-md-3 mobile-hide cordova-hide'>  <!-- New title info replacing old empty space -->
@@ -38,11 +21,6 @@
     </q-card flat>
 
   <!-- </q-toolbar> -->
-
-
-
-
-<!-- <div class='col-xs-0 col-md-3'></div> -->
 
 
 <q-toolbar-title class='text-center fit col-xs-8 col-md-4'>
@@ -75,7 +53,7 @@
       <q-icon name="favorite" v-bind:class="{'text-primary': inFavorites}" />
     </q-btn>  
 
-    <q-btn flat  @click="openReddit" class=''>
+    <q-btn  flat  @click="goToSource" class=''>
       <q-icon name="fa-reddit" color='black' />
     </q-btn>
 
@@ -111,11 +89,7 @@
   />
 </q-fab>
 
-
 </q-toolbar>
-
-
-
 
  </div>
 
@@ -124,13 +98,11 @@
 
 <script>
 import {mapState, mapActions, mapMutations} from 'vuex'
-import MiniPlayer from './MiniPlayer'
-import Player from './Player'
 import {BackToTop, openURL} from 'quasar'
+import notification from './notification'
 export default {
   name: 'control',
   inject: ['layout'],
-  components: { MiniPlayer, Player },
   directives: { BackToTop },
   computed: {
     ...mapState({
@@ -149,16 +121,34 @@ export default {
       return this.cleanTime(this.currentDuration)
     },
     thumbnailSrc () {
+      if (this.currentItem.source === 'sc') { return this.currentItem.artwork_url }
       return 'https://img.youtube.com/vi/' + this.currentItem.track_id + '/0.jpg'
     },
     sourceUrl () {
       let base = 'https://reddit.com/'
       return base + this.currentItem.subreddit
     },
-    inFavorites: function () {
+    inFavorites () {
+      if (!this.user) { return false }
       return this.user.favorites.some((fav) => {
         return fav.track_id === this.currentItem.track_id
       })
+    },
+    controlTime () {
+      if (this.currentTime) {
+        return this.currentTime
+      }
+      else {
+        return 0
+      }
+    },
+    controlDuration () {
+      if (this.currentDuration) {
+        return this.currentDuration
+      }
+      else {
+        return 1
+      }
     }
   },
   methods: {
@@ -173,7 +163,9 @@ export default {
     ...mapMutations('player', [
       'togglePlayer',
       'toggleMiniPlayer',
-      'seekTime'
+      'seekTime',
+      'setPlaying',
+      'setPaused'
     ]),
     showPlayer () {
       if (!this.playerVisible) {
@@ -188,6 +180,9 @@ export default {
     openReddit () {
       openURL(this.sourceUrl)
     },
+    goToSource () {
+      openURL(this.currentItem.url)
+    },
     saveOrRemove () {
       if (this.inFavorites) {
         this.removeItem(this.currentItem)
@@ -197,10 +192,10 @@ export default {
       }
     },
     pause () {
-      this.$root.$emit('pause')
+      this.setPaused()
     },
     resume () {
-      this.$root.$emit('resume')
+      this.setPlaying()
     },
     cleanTime (t) {
       // https://stackoverflow.com/questions/5539028/converting-seconds-into-hhmmss
@@ -210,86 +205,18 @@ export default {
       var s = Math.floor(t % 3600 % 60)
       return ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2)
     },
-    onSuccess () {
-      console.log('MusicControls created successfully')
-    },
-    onError (err) {
-      console.log('Failed to create musicCronrols')
-      console.log(err)
-    },
     updateNotification () {
-      console.log('Creating Music Controls')
       if (this.$q.platform.is.cordova) {
-        MusicControls.create({
-          track: this.currentItem.raw_title, // optional, default : ''
-          // artist: 'Muse', // optional, default : ''
-          cover: this.thumbnailSrc, // optional, default : nothing
-          isPlaying: this.currentlyPlaying, // optional, default : true
-          ticker: 'Now playing "Time is Running Out"'
-        }, this.onSuccess, this.onError)
-
-        // Register callback
-        MusicControls.subscribe(this.notifyEvents)
-        MusicControls.listen()
-      }
-    },
-    notifyEvents (action) {
-      const message = JSON.parse(action).message
-      switch (message) {
-        case 'music-controls-next':
-          this.selectNext() // changes currentItem to trigger update
-          this.updateNotification()
-          break
-        case 'music-controls-previous':
-          this.selectPrevious() // changes currentItem to trigger update
-          this.updateNotification()
-          break
-        case 'music-controls-pause':
-          this.pause()
-          this.updateNotification()
-          break
-        case 'music-controls-play':
-          this.resume()
-          this.updateNotification()
-          break
-        case 'music-controls-destroy':
-          // todo
-          break
-
-        // External controls (iOS only)
-        case 'music-controls-toggle-play-pause' :
-          // Do something
-          break
-        case 'music-controls-seek-to':
-          const seekToInSeconds = JSON.parse(action).position
-          MusicControls.updateElapsed({
-            elapsed: seekToInSeconds,
-            isPlaying: true
-          })
-          self.seekTime(seekToInSeconds)
-          // Do something
-          break
-
-        // Headset events (Android only)
-        // All media button events are listed below
-        case 'music-controls-media-button' :
-          // Do something
-          console.log('Media button pressed')
-          break
-        case 'music-controls-headset-unplugged':
-          // Do something
-          break
-        case 'music-controls-headset-plugged':
-          // Do something
-          break
-        default:
-          break
+        let title = this.currentItem.raw_title
+        let artist = this.currentItem.artist || ''
+        let art = this.thumbnailSrc
+        let playing = this.currentlyPlaying
+        notification.sendNotification(title, artist, art, playing)
       }
     }
   },
   watch: {
     currentlyPlaying () {
-      // console.log('new item')
       this.updateNotification()
     }
   }
